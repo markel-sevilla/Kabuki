@@ -1,5 +1,5 @@
 # Kabuki
-Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main idea is to abstract OpenGl and make it easy for a person to start rendering medium to big scenes
+Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main idea is to abstract OpenGL while giving enough modularity to create new features using the rendering system.
 
 ## Features
 
