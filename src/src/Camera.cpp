@@ -18,18 +18,7 @@
 
 namespace Demo
 {
-    /**
-    * @brief  Construct the Camera itself
-    * @param[in] Fovy field of view
-    * @param[in] Width width of the frustum
-    * @param[in] Height heigt of the frustum
-    * @param[in] Near near plane 
-    * @param[in] Far far plane 
-    * @param[in] Position pos of the cam in world
-    * @param[in] Target target of the cam
-    * @param[in] Up up vector
-    * @return none
-    */
+ 
     Camera::Camera(float Fovy, float Width, float Height,
         float Near, float Far,
         glm::vec3 Position, glm::vec3 Target, glm::vec3 Up)
@@ -65,13 +54,6 @@ namespace Demo
         mCursor = glm::vec2(0);
     }
 
-
-    /**
-    * @brief  Updates the matrices of the cameras 
-    * @param[in] window : GLFW Window to update 
-    * @return void 
-    */
-
     void Camera::Update(GLFWwindow* window)
     {
         GetInput(window);
@@ -82,13 +64,6 @@ namespace Demo
         //view matrix
         mView = glm::lookAt(mCamPos, mCamTarget, mCamUp);
     }
-
-    
-    /**
-    * @brief  It polls the inputs from the GLFW window  
-    * @param[in] window : GLFW Window to update 
-    * @return void 
-    */
 
     void Camera::GetInput(GLFWwindow* window)
     {

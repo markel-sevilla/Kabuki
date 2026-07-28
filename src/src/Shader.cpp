@@ -21,12 +21,6 @@ namespace Graphics
         glDeleteProgram(ID);
     }
 
-        /**
-        * @brief  It loads the shader from a vertex and a fragment  
-        * @param[in] vertexPath: vertex shader path
-        * @param[in] fragmentPath: fragment shader path
-        * @return void 
-        */
     void Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
     {
         std::string vertexCode;
@@ -58,7 +52,7 @@ namespace Graphics
         }
         catch (std::ifstream::failure e)
         {
-            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ\n" << e.what() << std::endl;
+            LOG_ERROR("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ\n" + e.what());
         }
 
 
@@ -80,7 +74,7 @@ namespace Graphics
         if (!success)
         {
             glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl << vertexPath << std::endl;
+            LOPG_TRACE("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" + infoLog + std::endl + vertexPath );
         };
 
         // Fragment Shader
@@ -93,7 +87,7 @@ namespace Graphics
         if (!success)
         {
             glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl << fragmentPath <<std::endl;
+            LOG_TRACE("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" + infoLog + std::endl + fragmentPath );
         };
 
         // Program
@@ -107,7 +101,7 @@ namespace Graphics
         if (!success)
         {
             glGetProgramInfoLog(ID, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl << fragmentPath << std::endl;
+            LOG_TRACE("ERROR::SHADER::PROGRAM::LINKING_FAILED\n" + infoLog + std::endl + fragmentPath );
         }
 
         // after getting program just delete
@@ -120,15 +114,7 @@ namespace Graphics
     {
         glUseProgram(ID);
     }
-
-    //Overloading of different uniform setters
-
-    /**
-    * @brief  It sets a uniform from the shader   
-    * @param[in] name: name of the unform  
-    * @param[in] uniform: the value itself to upload 
-    * @return void 
-    */
+    
     void Shader::SetUniform(const std::string& name, const glm::vec3& vec) const
     {
         glUniform3f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y, vec.z);

@@ -11,16 +11,10 @@
  * @version 1.0
  */
  #include "ComputeShader.h"
- 
+ #include "Log.h"
+
  namespace Graphics
  {
-
-    /**
-    * @brief  It loads the shader from a vertex and a fragment  
-    * @param[in] computePath: the compute shader path
-    * @return void 
-    */
-
     void ComputeShader::LoadComputeShader( const char* computePath)
     {
 
@@ -46,7 +40,7 @@
         }
         catch (std::ifstream::failure e)
         {
-            std::cout << "ERROR::COMPUTE_SHADER::FILE_NOT_SUCCESFULLY_READ\n" << e.what() << std::endl;
+            LOG_ERROR("ERROR::COMPUTE_SHADER::FILE_NOT_SUCCESFULLY_READ\n" + e.what() );
         }
 
 

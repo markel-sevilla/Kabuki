@@ -25,7 +25,10 @@ namespace Graphics
         // the program ID
         unsigned int ID;
         
-        // constructor reads and builds the shader
+        /**
+        * @brief  It constructs the shader  
+        * @return void 
+        */
         Shader() {
             ID = 0;
         }
@@ -41,9 +44,18 @@ namespace Graphics
         
         void LoadShader(const char* vertexPath, const char* fragmentPath);
 
-        // use/activate the shader
+        /**
+        * @brief  Sets a program in use
+        * @return void 
+        */
         void Use();
 
+        /**
+        * @brief  Sets a uniform in a shader (overload)
+        * @param[in] name: nmae of the variable
+        * @param[in] uniform: the uniform to set
+        * @return void 
+        */
         void SetUniform(const std::string& name, const glm::vec3& vec) const;
         void SetUniform(const std::string& name, const glm::vec2& vec) const;
         void SetUniform(const std::string& name, const float& f) const;
