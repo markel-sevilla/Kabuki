@@ -13,8 +13,10 @@
  */
 
 
-namespace Demo
+namespace Graphics
 {
+   
+
     class KbkStage
     {
         public:

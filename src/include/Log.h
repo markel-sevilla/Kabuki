@@ -15,8 +15,8 @@
 #pragma once
 #include "DebuggingInstance.h"
 
-#define LOG_TRACE(msg)   Engine::DebuggingInstance::get()->log(Engine::DebuggingInstance::LogLevel::Trace,   msg, __FILE__, __LINE__)
-#define LOG_INFO(msg)    Engine::DebuggingInstance::get()->log(Engine::DebuggingInstance::LogLevel::Info,     msg, __FILE__, __LINE__)
-#define LOG_WARNING(msg) Engine::DebuggingInstance::get()->log(Engine::DebuggingInstance::LogLevel::Warning,  msg, __FILE__, __LINE__)
-#define LOG_ERROR(msg)   Engine::DebuggingInstance::get()->log(Engine::DebuggingInstance::LogLevel::Error,    msg, __FILE__, __LINE__)
-#define LOG_FATAL(msg)   Engine::DebuggingInstance::get()->log(Engine::DebuggingInstance::LogLevel::Fatal,    msg, __FILE__, __LINE__)
+#define LOG_TRACE(msg)   Debug::DebuggingInstance::get()->log(Debug::DebuggingInstance::LogLevel::Trace,   msg, __FILE__, __LINE__)
+#define LOG_INFO(msg)    Debug::DebuggingInstance::get()->log(Debug::DebuggingInstance::LogLevel::Info,     msg, __FILE__, __LINE__)
+#define LOG_WARNING(msg) Debug::DebuggingInstance::get()->log(Debug::DebuggingInstance::LogLevel::Warning,  msg, __FILE__, __LINE__)
+#define LOG_ERROR(msg)   Debug::DebuggingInstance::get()->log(Debug::DebuggingInstance::LogLevel::Error,    msg, __FILE__, __LINE__)
+#define LOG_FATAL(msg)   Debug::DebuggingInstance::get()->log(Debug::DebuggingInstance::LogLevel::Fatal,    msg, __FILE__, __LINE__)

@@ -14,7 +14,7 @@
 
  #include "KbkPipelineConfig.h"
 
-namespace Demo
+namespace Graphics
 {
     class KbkPipeline
     {
@@ -29,11 +29,12 @@ namespace Demo
         */
         void initGLFWPipeline(int width, int height, bool resizeWindow, bool hintVisible);
 
-        void 
         PipelineConfig glConfig_;
+
 
         private:
 
-        std::vector<>
+        std::unordered_map<int, KbkStage> u_stages_;
+        std::vector<KbkStage> stages_;
     }
 }

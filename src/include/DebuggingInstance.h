@@ -24,7 +24,7 @@
 #pragma warning(pop)
 
 
-namespace Engine
+namespace Debug
 {
 	class ISink;
 

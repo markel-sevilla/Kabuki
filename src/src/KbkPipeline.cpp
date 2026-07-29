@@ -11,7 +11,8 @@
  */
 #include "KbkPipeline.h"
 
-namespace Demo{
+namespace Graphics
+{
 
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {

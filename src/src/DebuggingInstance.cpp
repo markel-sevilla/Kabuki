@@ -22,11 +22,8 @@
 #include <fmt/format.h>
 #include <fmt/color.h>
 
-namespace Engine
+namespace Debug
 {
-   
-   
-    
     std::string DebuggingInstance::levelToString(LogLevel level) const
     {
         switch (level)
