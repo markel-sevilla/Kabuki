@@ -13,8 +13,8 @@ Brief : main
 #include "Parser.h"
 #include "Scene.h"
 #include <ctime>
-#include "KbkPipelineConfig.h"
-#include "KbkPipeline.h"
+#include "KPipelineConfig.h"
+#include "KPipeline.h"
 #include "Log.h"
 #include <memory>
 
@@ -22,7 +22,7 @@ Brief : main
 int main()
 {
 
-    KbkPipeline* pipeline = std::make_shared<KbkPipeline>();
+    KPipeline* pipeline = std::make_shared<KPipeline>();
 
     pipeline->initGLFWPipeline(1600, 900, true, true);
     

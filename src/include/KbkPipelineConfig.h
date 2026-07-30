@@ -154,7 +154,7 @@ struct MiscConfig
  * @details Agrupa todas las subestructuras de configuración. Se puede
  *          modificar cualquier apartado y luego aplicarlo con apply().
  */
-class KbkPipelineConfig
+class KPipelineConfig
 {
 public:
     CullingConfig       culling;

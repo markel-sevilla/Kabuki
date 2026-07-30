@@ -1,7 +1,7 @@
 #pragma once 
 
 /**
- * @file    KbkStage.h
+ * @file    KStage.h
  * @brief   Unitary stage for the pipeline 
  *
  * @details  one stage ususally represents one execution of a certain shader and its parameters
@@ -17,7 +17,7 @@ namespace Graphics
 {
    
 
-    class KbkStage
+    class KStage
     {
         public:
         /**
@@ -26,7 +26,7 @@ namespace Graphics
         * @return void 
         */
 
-        KbkStage(Shader* shader);
+        KStage(Shader* shader);
 
         private:
 

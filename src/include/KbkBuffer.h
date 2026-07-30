@@ -2,19 +2,38 @@
 
 namespace Graphics{
 
+    enum class GLAttachment {
+        ColorHDR,       // RGBA16F - para posición, color HDR, etc.
+        ColorLDR,       // RGBA8 - color normal 0-1
+        ColorSingleF,   // R32F - un solo canal float (ej. luminancia, ID)
+        ColorRG_F,      // RG16F - normales comprimidas, velocity buffers
+        Depth,          // solo depth, sampleable
+        DepthStencil,   // depth+stencil, normalmente NO sampleable (renderbuffer)
+        Stencil,         // solo stencil (raro pero por completitud)
+        Custom
+    };
 
-    class KbkTextureParams{
+    struct GLFormatInfo {
 
-        int t_handle_; // texture handler
-        uint32_t format;
+        GLenum internalFormat_;
+        GLenum format_;
+        GLenum type_;
+        GLenum attachmentPoint_; // se resuelve luego según índice de color si aplica
+    };
+
+    enum class KAttachmentStorage
+    {
+        Texture,        // sampleable después
+        Renderbuffer    // write-only, más rápido, no sampleable
+    }
+
+    class KTexture{
+
+        int tHandle_; // texture handler
         uint32_t
     }
 
-    class KbkDepthParams : public KbkTextureParams{
-
-    }
-
-    class KbKBuffer
+    class KBuffer
     {
         public:
 
@@ -26,8 +45,11 @@ namespace Graphics{
         * @param[in] depth parameters: depth attachment for opengl 
         * @return void 
         */
-        KbkBuffer(int width, int height, const std::vector<KbkTextureParams>& textures, const KbkDepthParam& depth = 0);
-        KbkBuffer(int width, int height, const KbkTextureParams& textures, const KbkDepthParam& depth = 0);
+        KBuffer(int width, int height, const std::vector<KTextureParams>& textures, const KDepthParam& depth = 0);
+        KBuffer(int width, int height, const KTextureParams& textures, const KDepthParam& depth = 0);
+        
+        
+        GLFormatInfo ResolveFormat(AttachmentKind kind);
 
         private:
 

@@ -12,11 +12,11 @@
  * @version 1.0
  */
 
- #include "KbkPipelineConfig.h"
+ #include "KPipelineConfig.h"
 
 namespace Graphics
 {
-    class KbkPipeline
+    class KPipeline
     {
         public:
         /**
@@ -34,7 +34,7 @@ namespace Graphics
 
         private:
 
-        std::unordered_map<int, KbkStage> u_stages_;
-        std::vector<KbkStage> stages_;
+        std::unordered_map<int, KStage> u_stages_;
+        std::vector<KStage> stages_;
     }
 }

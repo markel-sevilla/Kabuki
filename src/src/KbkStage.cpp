@@ -9,12 +9,12 @@
  * @date    2026-07-25
  * @version 1.0
  */
-#include "KbkStage.h"
+#include "KStage.h"
 
 namespace Graphics
 {
-    KbkStage::KbkStage()
+    KStage::KStage()
     {
-        
+
     }
 }

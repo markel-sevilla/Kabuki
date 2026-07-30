@@ -9,11 +9,33 @@
  * @date    2026-07-25
  * @version 1.0
  */
-#include "KbkBuffer.h"
+#include "KBuffer.h"
 
 namespace Graphics
 {
-    KbKBuffer::KbkBuffer(int width, int height, const std::vector<KbkTextureParams>& textures, const KbkDepthParam& depth = 0)
+    GLFormatInfo KAttachment::ResolveFormat(AttachmentKind kind) {
+        
+        switch (kind) {
+
+            case GLAttachment::ColorHDR:
+                return { GL_RGBA16F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0 };
+            case GLAttachment::ColorLDR:
+                return { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0 };
+            case GLAttachment::ColorSingleF:
+                return { GL_R32F, GL_RED, GL_FLOAT, GL_COLOR_ATTACHMENT0 };
+            case GLAttachment::ColorRG_F:
+                return { GL_RG16F, GL_RG, GL_FLOAT, GL_COLOR_ATTACHMENT0 };
+            case GLAttachment::Depth:
+                return { GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT };
+            case GLAttachment::DepthStencil:
+                return { GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, GL_DEPTH_STENCIL_ATTACHMENT };
+            case GLAttachment::Stencil:
+                return { GL_STENCIL_INDEX8, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, GL_STENCIL_ATTACHMENT };
+        }
+        return {};
+    }
+
+    KBuffer::KBuffer(int width, int height, const std::vector<KTextureParams>& textures, const KDepthParam& depth = 0)
     {
         glGenFramebuffers(1, &gBuffer);
 	    glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
@@ -88,5 +110,5 @@ namespace Graphics
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    KbkBuffer(int width, int height, const KbkTextureParams& textures, const KbkDepthParam& depth = 0);
+    KBuffer(int width, int height, const KTextureParams& textures, const KDepthParam& depth = 0);
 }
