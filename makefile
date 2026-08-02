@@ -1,17 +1,17 @@
 VCPKG-PATH=$(HOME)/vcpkg/scripts/buildsystems/vcpkg.cmake
 BUILD-TYPE=Debug
-SCENE-EXE=build/open-stage
+SCENE-EXE=build/k-lib
 
 
 .PHONY: build clean check-warnings memcheck static-analysis
 
 check-warnings: clean
 	cmake -B build/ -DCMAKE_BUILD_TYPE=$(BUILD-TYPE) -DCMAKE_TOOLCHAIN_FILE=$(VCPKG-PATH) -DCMAKE_COMPILE_WARNING_AS_ERROR=0
-	cmake --build ./build --target open-stage
+	cmake --build ./build --target k-lib
 
 build: clean
 	cmake -B build/ -DCMAKE_BUILD_TYPE=$(BUILD-TYPE) -DCMAKE_TOOLCHAIN_FILE=$(VCPKG-PATH)
-	cmake --build ./build --target open-stage
+	cmake --build ./build --target k-lib
 	
 	
 memcheck: 

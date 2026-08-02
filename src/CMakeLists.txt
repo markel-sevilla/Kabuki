@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(rendering-playground)
+project(k-lib)
 
 # Engine library
 #add_library(${PROJECT_NAME}   
@@ -7,7 +7,18 @@ project(rendering-playground)
  #       )
  
 add_executable(${PROJECT_NAME}
-		)
+		    include/Camera.h
+            include/KbkBuffer.h
+            include/DebuggingInstance.h
+            include/KbkPipelineConfig.h
+            include/KbkStage.h
+            include/Log.h
+            include/Shader.h
+            src/KbkBuffer.cpp
+            src/Camera.cpp
+            src/DebuggingInstance.cpp
+            src/KbkStage.cpp
+            src/Shader.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC 
     .

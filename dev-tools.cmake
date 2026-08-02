@@ -12,14 +12,19 @@ if(CMake_RUN_CLANG_TIDY)
         file(
             GLOB_RECURSE
             ALL_SOURCE_FILES
-            src/CS350Loader.cpp
-            src/CS350Loader.hpp
-            src/Geometry.hpp
-            src/Geometry.cpp
-            src/Shapes.hpp
-            src/Shapes.cpp
-            src/ShapeUtils.hpp
-            src/ShapeUtils.cpp)
+            include/Camera.h
+            include/KbkBuffer.h
+            include/DebuggingInstance.h
+            include/KbkPipelineConfig.h
+            include/KbkStage.h
+            include/Log.h
+            include/Shader.h
+            src/KbkBuffer.cpp
+            src/Camera.cpp
+            src/DebuggingInstance.cpp
+            src/KbkStage.cpp
+            src/Shader.cpp
+            )
         add_custom_target(
             clang-tidy
             COMMAND

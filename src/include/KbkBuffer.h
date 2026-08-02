@@ -1,6 +1,8 @@
 #include <vector>
+#include "glad/glad.h"
 
-namespace Graphics{
+namespace Graphics
+{
 
     enum class GLAttachment {
         ColorHDR,       // RGBA16F - para posición, color HDR, etc.
@@ -13,6 +15,17 @@ namespace Graphics{
         Custom
     };
 
+    enum class GLTarget 
+    {
+        Tex2D,
+        Tex2DMultisample,
+        Cubemap,   // requiere glFramebufferTexture2D con la cara concreta
+        CubemapFace,   // requiere glFramebufferTexture2D con la cara concreta
+        CubemapArray,       // completo, requiere glFramebufferTexture
+        Tex2DArray,    // requiere glFramebufferTexture o glFramebufferTextureLayer
+        Tex3D
+    };
+
     struct GLFormatInfo {
 
         GLenum internalFormat_;
@@ -21,17 +34,35 @@ namespace Graphics{
         GLenum attachmentPoint_; // se resuelve luego según índice de color si aplica
     };
 
-    enum class KAttachmentStorage
+    enum class GLAttachmentStorage
     {
         Texture,        // sampleable después
         Renderbuffer    // write-only, más rápido, no sampleable
-    }
+    };
 
-    class KTexture{
+    class KAttachment
+    {
+        KAttachment() 
+        : format_(ResolveFormat(ColorHDR)), 
+          target_(Tex2D) {
+        }
+
+        KAttachment(GLAttachment kind, GLTarget target = Tex2D) 
+        : format_(ResolveFormat(kind)),
+          target_(target)
+        {}
 
         int tHandle_; // texture handler
-        uint32_t
-    }
+        GLFormatInfo format_;
+        GLTarget target_;
+
+        /**
+        * @brief  It loads the format of the texture  
+        * @param[in] GLAttachment kind 
+        * @return void 
+        */
+        static GLFormatInfo ResolveFormat(GLAttachment kind);
+    };
 
     class KBuffer
     {
@@ -41,19 +72,19 @@ namespace Graphics{
         * @brief  It loads the shader from a vertex and a fragment  
         * @param[in] width: width of the buffer to paint
         * @param[in] height: height of the buffer to paint
-        * @param[in] texture parameters: color setup fpr opengl
-        * @param[in] depth parameters: depth attachment for opengl 
+        * @param[in] attachments parameters: color setup fpr opengl
         * @return void 
         */
-        KBuffer(int width, int height, const std::vector<KTextureParams>& textures, const KDepthParam& depth = 0);
-        KBuffer(int width, int height, const KTextureParams& textures, const KDepthParam& depth = 0);
+        KBuffer(int width, int height, const std::vector<KAttachment>& attachments);
+        KBuffer(int width, int height, const KAttachment& attachment);
+        KBuffer(int width, int height);
         
-        
-        GLFormatInfo ResolveFormat(AttachmentKind kind);
 
         private:
 
         int b_handle_;
-        std::vector<int> textureHandles_;
-    }
+        uint32_t width_, height;
+        GLAttachmentStorage storage_;
+        std::vector<KAttachment> attachments_;
+    };
 }

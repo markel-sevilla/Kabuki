@@ -14,6 +14,13 @@
 namespace Graphics
 {
 
+    KPipeline::KPipeline(int width, int height, bool resizeable, bool hintVisible) : 
+                         size {width, hieght},
+                         resizeable_(resizeable),
+                         hintVisible_(hintVisible) 
+    {
+    }
+
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
         glViewport(0, 0, width, height);

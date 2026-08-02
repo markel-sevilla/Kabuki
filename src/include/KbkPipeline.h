@@ -12,7 +12,9 @@
  * @version 1.0
  */
 
- #include "KPipelineConfig.h"
+#include "KPipelineConfig.h"
+#include <glm/vec2>
+
 
 namespace Graphics
 {
@@ -27,14 +29,21 @@ namespace Graphics
         * @param[in] hintVisible: hint visible yes or no
         * @return void 
         */
-        void initGLFWPipeline(int width, int height, bool resizeWindow, bool hintVisible);
+        
+        KPipeline( int width, int height, bool resizeable = true, bool hintVisible = true);
 
         PipelineConfig glConfig_;
-
-
+        
+        
         private:
-
+        
+        void initGLFWPipeline(int width, int height, bool resizeWindow, bool hintVisible);
         std::unordered_map<int, KStage> u_stages_;
         std::vector<KStage> stages_;
+
+        glm::vec2 size_;
+        bool resizeable_;
+        bool hintVisible_;
+        
     }
 }
