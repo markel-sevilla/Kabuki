@@ -16,7 +16,7 @@
 namespace Graphics
 {
    
-
+    class Shader;
     class KStage
     {
         public:
@@ -29,7 +29,5 @@ namespace Graphics
         KStage(Shader* shader);
 
         private:
-
-        std::vector<>
-    }
+    };
 }

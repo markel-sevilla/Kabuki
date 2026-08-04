@@ -43,8 +43,13 @@ namespace Debug
         }
     }
     
-    DebuggingInstance::DebuggingInstance() : appInstance(nullptr), mDebugMessenger(nullptr)
+    DebuggingInstance::DebuggingInstance() : appInstance(nullptr)
     {
+        
+    #ifdef VULKAN_API
+        mDebugMessenger = nullptr;
+    #endif
+
         // we add a console sink by default, but we could add more sinks here (like file sink)
         mSinks.push_back(std::make_unique<ConsoleSink>());
         mSinks.push_back(std::make_unique<FileSink>("log.txt"));

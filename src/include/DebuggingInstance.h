@@ -15,7 +15,6 @@
 #pragma warning(push)
 #pragma warning(disable: 4996)  // Para deprecation MSG_WARNINGs generales
 #define _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS
-#include <vulkan/vulkan.hpp>  
 #include <vector>
 #include <string>
 #include <mutex>
@@ -46,23 +45,7 @@ namespace Debug
 			return instance.get();
 		}
 
-		/**
-        * @brief  It destroys the debugging instance  
-        * @return void
-        */
-	    void destroy()
-		{
-			VkInstance instance = reinterpret_cast<VkInstance>(appInstance);
-
-			if (instance) {
-
-				auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-				if (func != nullptr && mDebugMessenger)
-				{
-					func(instance, mDebugMessenger, nullptr);
-				}
-			}
-		}
+		
 
 		enum class LogLevel
 		{
@@ -125,15 +108,34 @@ namespace Debug
 		const std::vector<const char*>& GetValidationLayers() { return mValidationLayers; }
 		void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 		void setupDebugMessenger(VkInstance instance, bool eval);
+
+		/**
+        * @brief  It destroys the debugging instance  
+        * @return void
+        */
+	    void destroy()
+		{
+			VkInstance instance = reinterpret_cast<VkInstance>(appInstance);
+
+			if (instance) {
+
+				auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+				if (func != nullptr && mDebugMessenger)
+				{
+					func(instance, mDebugMessenger, nullptr);
+				}
+			}
+		}
 #endif 
 
 	private:
+#ifdef  VULKAN_API // for future vulkan compatibility
 		//validation layers vector
 		const std::vector<const char*> mValidationLayers = { "VK_LAYER_KHRONOS_validation" };
-
+		
 		//debug messenger for vulkan 
 		VkDebugUtilsMessengerEXT mDebugMessenger;
-
+#endif
 		//sink format
 		std::vector<std::unique_ptr<ISink>> mSinks;
 		std::mutex mMutex;

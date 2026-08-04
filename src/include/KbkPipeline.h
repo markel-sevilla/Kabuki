@@ -1,7 +1,7 @@
 #pragma once 
 
 /**
- * @file    Pipeline.h
+ * @file    KPipeline.h
  * @brief   Simple OpenGL pipeline wrap up class 
  *
  * @details  Pipeline class that implements the abstraction for OpenGL to later be used in the stager
@@ -12,17 +12,22 @@
  * @version 1.0
  */
 
-#include "KPipelineConfig.h"
-#include <glm/vec2>
-
+#include <glm/vec2.hpp>
+#include "KbkPipelineConfig.h"
+#include <vector>
+#include <unordered_map>
+#include <memory>
+#include "KbkStage.h"
 
 namespace Graphics
 {
+    class KStage;
+
     class KPipeline
     {
         public:
         /**
-        * @brief  It loads the shader from a vertex and a fragment  
+        * @brief  It constructs the pipeline itself  
         * @param[in] width: width of the window
         * @param[in] height: height of the window
         * @param[in] resizeWindow: window resize yes or no
@@ -31,19 +36,28 @@ namespace Graphics
         */
         
         KPipeline( int width, int height, bool resizeable = true, bool hintVisible = true);
+        KPipelineConfig glConfig_;
+        
+        ~KPipeline();
+     
 
-        PipelineConfig glConfig_;
-        
-        
         private:
         
-        void initGLFWPipeline(int width, int height, bool resizeWindow, bool hintVisible);
-        std::unordered_map<int, KStage> u_stages_;
-        std::vector<KStage> stages_;
+        /**
+        * @brief  It loads the glfw pipeline with glad  
+        * @param[in] width: width of the window
+        * @param[in] height: height of the window
+        * @param[in] resizeWindow: window resize yes or no
+        * @param[in] hintVisible: hint visible yes or no
+        * @return void 
+        */
+        int initGLFWPipeline(int width, int height, bool resizeWindow, bool hintVisible);
+        std::unordered_map<int, std::unique_ptr<KStage>> u_stages_;
+        std::vector<std::unique_ptr<KStage>> stages_;
 
         glm::vec2 size_;
         bool resizeable_;
         bool hintVisible_;
         
-    }
+    };
 }

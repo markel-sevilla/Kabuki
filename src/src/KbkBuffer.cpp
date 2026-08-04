@@ -10,74 +10,90 @@
  * @version 1.0
  */
 #include "KbkBuffer.h"
+#include <iostream>
 
 namespace Graphics
 {
-    GLFormatInfo KBuffer::ResolveFormat(GLAttachment kind) {
+    GLFormatInfo KAttachment::ResolveFormat(GLAttachment kind) {
         
         switch (kind) {
 
             case GLAttachment::ColorHDR:
-                return { GL_RGBA16F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0 };
+                return { GL_RGBA16F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, false };
             case GLAttachment::ColorLDR:
-                return { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0 };
+                return { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0, false };
             case GLAttachment::ColorSingleF:
-                return { GL_R32F, GL_RED, GL_FLOAT, GL_COLOR_ATTACHMENT0 };
+                return { GL_R32F, GL_RED, GL_FLOAT, GL_COLOR_ATTACHMENT0, true };
             case GLAttachment::ColorRG_F:
-                return { GL_RG16F, GL_RG, GL_FLOAT, GL_COLOR_ATTACHMENT0 };
+                return { GL_RG16F, GL_RG, GL_FLOAT, GL_COLOR_ATTACHMENT0, false };
             case GLAttachment::Depth:
-                return { GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT };
+                return { GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT, true };
             case GLAttachment::DepthStencil:
-                return { GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, GL_DEPTH_STENCIL_ATTACHMENT };
+                return { GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, GL_DEPTH_STENCIL_ATTACHMENT, true };
             case GLAttachment::Stencil:
-                return { GL_STENCIL_INDEX8, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, GL_STENCIL_ATTACHMENT };
+                return { GL_STENCIL_INDEX8, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, GL_STENCIL_ATTACHMENT, true };
         }
         return {};
     }
 
 
-	KAttachment::KAttachment()
-    KBuffer::KBuffer(int width, int height, const std::vector<GLFormatInfo>& attachments)
-    {
-        glGenFramebuffers(1, &b_handle_);
-	    glBindFramebuffer(GL_FRAMEBUFFER , b_handle_);
-        
-		GLFormatInfo depth; 
-		int i = 0;
 
+    KBuffer::KBuffer(int width, int height, std::vector<KAttachment>& attachments)
+    {
+        glGenFramebuffers(1, &handle_);
+	    glBindFramebuffer(GL_FRAMEBUFFER , handle_);
+        
+		KAttachment depth; 
+
+		int i = 0;
+		std::vector<GLuint> attachmentsToDraw;
+		
         for(auto& att : attachments)
         {
 			// depth case is handled later 
-			if(att.attachmentPoint_ == GL_DEPTH_ATTACHMENT)
+			if(att.getFormat().attachmentPoint_ == GL_DEPTH_ATTACHMENT)
 			{
 				depth = att;
 				continue;
 			}
 
-            // - position color buffer
-	        glGenTextures(1, &att.t_handle_);
-	        glBindTexture(GL_TEXTURE_2D, texture.t_handle_);
-	        glTexImage2D(GL_TEXTURE_2D, 0, att.internalFormat_, width, height, 0, att.format, att.type_, NULL);
+			//standard color buffer 
+	        glGenTextures(1, &att.getHandle());
+	        glBindTexture(GL_TEXTURE_2D, att.getHandle());
+	        glTexImage2D(GL_TEXTURE_2D, 0, att.getFormat().internalFormat_, width, height, 0, att.getFormat().format_, att.getFormat().type_, NULL);
 	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i++, GL_TEXTURE_2D, att.t_handle_, 0);
+			
+			//see if the attachment is clamped 
+			if(att.getFormat().clamped)
+			{
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			}
+			
+	        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, att.getHandle(), 0);
+
+			// push back the attachments to later draw them
+			attachmentsToDraw.push_back(GL_COLOR_ATTACHMENT0 + i++);
         }
 		
-
     	// Tell OpenGL which color attachments we�ll use (of this framebuffer) for rendering
-    	GLuint attachments[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
-    	glDrawBuffers(5, attachments);
+    	glDrawBuffers(attachmentsToDraw.size(), &attachmentsToDraw[0]);
 
     	// Create and attach depth buffer 
-		glGenTextures(1, &gDepth);
-		glBindTexture(GL_TEXTURE_2D, gDepth);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		if(depth.getFormat().attachmentPoint_ == GL_DEPTH_ATTACHMENT)
+		{
+			glGenTextures(1, &depth.getHandle());
+			glBindTexture(GL_TEXTURE_2D, depth.getHandle());
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+			
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth.getHandle(), 0);
+		}
 		
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gDepth, 0);
 
 		// Check if framebuffer is complete
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -85,5 +101,36 @@ namespace Graphics
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    KBuffer(int width, int height, const KTextureParams& textures, const KDepthParam& depth = 0);
+
+    KBuffer::KBuffer(int width, int height, KAttachment& att)
+	{
+		glGenFramebuffers(1, &handle_);
+	    glBindFramebuffer(GL_FRAMEBUFFER , handle_);
+		
+		//standard color buffer 
+	    glGenTextures(1, &att.getHandle());
+	    glBindTexture(GL_TEXTURE_2D, att.getHandle());
+	    glTexImage2D(GL_TEXTURE_2D, 0, att.getFormat().internalFormat_, width, height, 0, att.getFormat().format_, att.getFormat().type_, NULL);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		//see if the attachment is clamped 
+		if(att.getFormat().clamped)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		}
+
+	    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, att.getHandle(), 0);
+		
+    	// Tell OpenGL which color attachments we�ll use (of this framebuffer) for rendering
+		GLuint attachment = GL_COLOR_ATTACHMENT0;
+    	glDrawBuffers(1, &attachment);
+
+		// Check if framebuffer is complete
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			std::cerr << "Framebuffer not complete!" << std::endl;
+
+    	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
 }

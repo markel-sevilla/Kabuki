@@ -9,12 +9,12 @@
  * @date    2026-07-25
  * @version 1.0
  */
-#include "KStage.h"
+#include "KbkStage.h"
+#include "Shader.h"
 
 namespace Graphics
 {
-    KStage::KStage()
+    KStage::KStage(Shader* shader)
     {
-
     }
 }

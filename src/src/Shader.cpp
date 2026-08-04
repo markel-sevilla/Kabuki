@@ -13,6 +13,7 @@
 #include "Shader.h"
 #include "glm/glm.hpp"
 #include "glad/glad.h"
+#include "Log.h"
 
 namespace Graphics
 {
@@ -52,7 +53,9 @@ namespace Graphics
         }
         catch (std::ifstream::failure e)
         {
-            LOG_ERROR("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ\n" + e.what());
+            std::string msg = "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ\n" ;
+            msg += e.what();
+            LOG_ERROR(msg.c_str());
         }
 
 
@@ -74,7 +77,9 @@ namespace Graphics
         if (!success)
         {
             glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-            LOPG_TRACE("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" + infoLog + std::endl + vertexPath );
+            std::string msg = "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" + std::string(infoLog) + "\n" + std::string(vertexPath) ;
+
+            LOG_TRACE(msg.c_str());
         };
 
         // Fragment Shader
@@ -87,7 +92,10 @@ namespace Graphics
         if (!success)
         {
             glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-            LOG_TRACE("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" + infoLog + std::endl + fragmentPath );
+
+            std::string msg = "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" + std::string(infoLog) + "\n" + std::string(fragmentPath) ; 
+            LOG_TRACE( msg.c_str());
+
         };
 
         // Program
@@ -101,7 +109,9 @@ namespace Graphics
         if (!success)
         {
             glGetProgramInfoLog(ID, 512, NULL, infoLog);
-            LOG_TRACE("ERROR::SHADER::PROGRAM::LINKING_FAILED\n" + infoLog + std::endl + fragmentPath );
+
+            std::string msg = std::string("ERROR::SHADER::PROGRAM::LINKING_FAILED\n") + std::string(infoLog) + "\n" + std::string(fragmentPath) ;
+            LOG_TRACE(msg);
         }
 
         // after getting program just delete

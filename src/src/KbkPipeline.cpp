@@ -9,24 +9,33 @@
  * @date    2026-07-25
  * @version 1.0
  */
-#include "KPipeline.h"
+#include "KbkPipeline.h"
+#include "KbkStage.h"
+#include "KbkPipelineConfig.h"
+#include "Log.h"
+#include <glad/glad.h>
+#include <glfw/glfw3.h>
 
 namespace Graphics
 {
 
     KPipeline::KPipeline(int width, int height, bool resizeable, bool hintVisible) : 
-                         size {width, hieght},
+                         size_ {width, height},
                          resizeable_(resizeable),
                          hintVisible_(hintVisible) 
     {
     }
 
+    KPipeline::~KPipeline()
+    {
+        glfwTerminate();
+    }
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
         glViewport(0, 0, width, height);
     }
 
-    void StagePipeline::initGLFWPipeline(int width, int height, bool resizeWindow, bool hintVisible)
+    int KPipeline::initGLFWPipeline(int width, int height, bool resizeWindow, bool hintVisible)
     {
         srand(static_cast<unsigned int>(std::time(0)));
 

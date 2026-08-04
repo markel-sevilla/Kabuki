@@ -32,6 +32,8 @@ namespace Graphics
         GLenum format_;
         GLenum type_;
         GLenum attachmentPoint_; // se resuelve luego según índice de color si aplica
+
+        bool clamped;
     };
 
     enum class GLAttachmentStorage
@@ -42,17 +44,27 @@ namespace Graphics
 
     class KAttachment
     {
+        public:
         KAttachment() 
-        : format_(ResolveFormat(ColorHDR)), 
-          target_(Tex2D) {
+        : format_(ResolveFormat(GLAttachment::ColorHDR)), 
+          target_(GLTarget::Tex2D) {
         }
 
-        KAttachment(GLAttachment kind, GLTarget target = Tex2D) 
+        KAttachment(GLAttachment kind, GLTarget target = GLTarget::Tex2D) 
         : format_(ResolveFormat(kind)),
           target_(target)
         {}
 
-        int tHandle_; // texture handler
+        GLuint& getHandle() { return handle_; }
+        GLFormatInfo& getFormat() { return format_; }
+        GLTarget& getTarget() { return target_; }
+
+        GLuint getHandle() const { return handle_; }
+        GLFormatInfo getFormat() const { return format_; }
+        GLTarget getTarget() const { return target_; }
+       
+        private:
+        GLuint handle_; // texture handler
         GLFormatInfo format_;
         GLTarget target_;
 
@@ -75,14 +87,14 @@ namespace Graphics
         * @param[in] attachments parameters: color setup fpr opengl
         * @return void 
         */
-        KBuffer(int width, int height, const std::vector<KAttachment>& attachments);
-        KBuffer(int width, int height, const KAttachment& attachment);
+        KBuffer(int width, int height, std::vector<KAttachment>& attachments);
+        KBuffer(int width, int height, KAttachment& attachment);
         KBuffer(int width, int height);
         
 
         private:
 
-        int b_handle_;
+        GLuint handle_;
         uint32_t width_, height;
         GLAttachmentStorage storage_;
         std::vector<KAttachment> attachments_;

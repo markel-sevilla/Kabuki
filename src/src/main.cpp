@@ -1,12 +1,8 @@
-#include <glad/glad.h>
-#include <glfw/glfw3.h>
+
 #include <iostream>
-#include "Shader.h"
-#include "Parser.h"
-#include "Scene.h"
 #include <ctime>
-#include "KPipelineConfig.h"
-#include "KPipeline.h"
+#include "KbkPipelineConfig.h"
+#include "KbkPipeline.h"
 #include "Log.h"
 #include <memory>
 
@@ -14,18 +10,17 @@
 int main()
 {
 
-    KPipeline* pipeline = std::make_shared<KPipeline>();
+    Graphics::KPipeline* pipeline = std::make_unique<Graphics::KPipeline>(1600, 900, true, true).get();
 
-    pipeline->initGLFWPipeline(1600, 900, true, true);
+    // pipeline->glConfig_.culling.enable = true;
+    // pipeline->glConfig_.culling.cullFace = GL_BACK;
+    // pipeline->glConfig_.culling.frontFace = GL_CCW;
+
+    // pipeline->glConfig_.depth.testEnabled = true;
+    // pipeline->glConfig_.depth.writeMask = true;
+    // pipeline->glConfig_.depth.depthFunc = GL_LESS;
+
     
-    pipeline->glConfig_.culling.enable = true;
-    pipeline->glConfig_.culling.cullFace = GL_BACK;
-    pipeline->glConfig_.culling.frontFace = GL_CCW;
-
-    pipeline->glConfig_.depth.testEnabled = true;
-    pipeline->glConfig_.depth.writeMask = true;
-    pipeline->glConfig_.depth.depthFunc = GL_LESS;
-
 //     //Culling(avoid seen back faces of the objs)
 //     CS562::CS562Renderer* renderer = new  CS562::CS562Renderer();
    
@@ -195,8 +190,6 @@ int main()
 //     }
 
     //terminate the framework
-    glfwTerminate();
-    delete renderer;
 
     return 0;
     

@@ -11,10 +11,14 @@ add_executable(${PROJECT_NAME}
             include/KbkBuffer.h
             include/DebuggingInstance.h
             include/KbkPipelineConfig.h
+            include/KbkPipeline.h
             include/KbkStage.h
             include/Log.h
             include/Shader.h
+            include/Sink.h
             src/KbkBuffer.cpp
+            src/KbkPipeline.cpp
+            src/main.cpp
             src/Camera.cpp
             src/DebuggingInstance.cpp
             src/KbkStage.cpp
