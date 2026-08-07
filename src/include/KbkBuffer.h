@@ -88,6 +88,7 @@ namespace Graphics
         * @return void 
         */
         KBuffer(int width, int height, std::vector<KAttachment>& attachments);
+        KBuffer(int width, int height, KAttachment* attachment, int size);
         KBuffer(int width, int height, KAttachment& attachment);
         KBuffer(int width, int height);
         

@@ -12,18 +12,18 @@ int main()
 
     Graphics::KPipeline* pipeline = std::make_unique<Graphics::KPipeline>(1600, 900, true, true).get();
 
-    // pipeline->glConfig_.culling.enable = true;
-    // pipeline->glConfig_.culling.cullFace = GL_BACK;
-    // pipeline->glConfig_.culling.frontFace = GL_CCW;
+    pipeline->glConfig_.culling.enabled = true;
+    pipeline->glConfig_.culling.cullFace = GL_BACK;
+    pipeline->glConfig_.culling.frontFace = GL_CCW;
 
-    // pipeline->glConfig_.depth.testEnabled = true;
-    // pipeline->glConfig_.depth.writeMask = true;
-    // pipeline->glConfig_.depth.depthFunc = GL_LESS;
+    pipeline->glConfig_.depth.testEnabled = true;
+    pipeline->glConfig_.depth.writeMask = true;
+    pipeline->glConfig_.depth.depthFunc = GL_LESS;
 
-    
-//     //Culling(avoid seen back faces of the objs)
-//     CS562::CS562Renderer* renderer = new  CS562::CS562Renderer();
-   
+
+    //subscribe the buffer with three attachments
+    pipeline->subscribe_buffer(1600, 900, "GBuffer", {ColorHDR, ColorHDR, ColorLDR}, 3 );
+
 //     renderer->ReloadShaders();
 //     LOG_TRACE("Reloaded the shaders" );
 
