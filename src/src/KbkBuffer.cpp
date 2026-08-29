@@ -33,6 +33,7 @@ namespace Graphics
             case GLAttachment::Stencil:
                 return { GL_STENCIL_INDEX8, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE, GL_STENCIL_ATTACHMENT, true };
         }
+		
         return {};
     }
 

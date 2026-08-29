@@ -1,5 +1,5 @@
 /**
- * @file    Shader.h
+ * @file    KShader.h
  * @brief   Wrap up for the shader OpenGl class 
  *
  * @details  It wraps up a shader and makes it easier fpr the pipeline to use it
@@ -19,7 +19,7 @@
 
 namespace Graphics
 {
-    class Shader
+    class KShader
     {
         public:
         // the program ID

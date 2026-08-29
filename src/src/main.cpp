@@ -10,19 +10,9 @@
 int main()
 {
 
-    Graphics::KPipeline* pipeline = std::make_unique<Graphics::KPipeline>(1600, 900, true, true).get();
+    Graphics::KPipeline* pipeline = std::unique_ptr<Graphics::KPipeline>(kCreateGLPipeline(1600, 900, DEF, true, true)).get();
 
-    pipeline->glConfig_.culling.enabled = true;
-    pipeline->glConfig_.culling.cullFace = GL_BACK;
-    pipeline->glConfig_.culling.frontFace = GL_CCW;
-
-    pipeline->glConfig_.depth.testEnabled = true;
-    pipeline->glConfig_.depth.writeMask = true;
-    pipeline->glConfig_.depth.depthFunc = GL_LESS;
-
-
-    //subscribe the buffer with three attachments
-    pipeline->subscribe_buffer(1600, 900, "GBuffer", {ColorHDR, ColorHDR, ColorLDR}, 3 );
+    
 
 //     renderer->ReloadShaders();
 //     LOG_TRACE("Reloaded the shaders" );

@@ -19,11 +19,48 @@
 namespace Graphics
 {
 
-    KPipeline::KPipeline(int width, int height, bool resizeable, bool hintVisible) : 
+    KPipeline* KPipeline::kCreateGLPipeline(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true)
+    {
+        return new KPipeline(width, height, KAPI::GL, type, resizeable, hintVisible);
+    }
+    
+    KPipeline* KPipeline::kCreateVKPipeline(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true)
+    {
+        return new KPipeline(width, height, KAPI::VK, type, resizeable, hintVisible);
+    }
+
+    KPipeline::KPipeline(int width, int height, KAPI api, KRenderType type, bool resizeable, bool hintVisible) : 
+                         api_(api),
+                         type_(type),                     
                          size_ {width, height},
                          resizeable_(resizeable),
                          hintVisible_(hintVisible) 
     {
+        initGLFWPipeline(width, height, resizeable, hintVisible);
+        
+        switch( type_ )
+        {
+            // we create the forward pipeline
+            case KRenderType::FWD:
+                createForwardGL();
+                break;
+            // we create a instanced pipeline
+            case KRenderType::INS:
+                createInstancedGL();
+                break;
+
+            // we create a deferred pipeline
+            case KRenderType::DEF:
+                createDeferredGL();
+                break;
+
+            // create the raytracing pipeline
+            case KRenderType::RTC:
+                createRayTraceGL();
+                break;
+
+            default : break;
+        }
     }
 
     KPipeline::~KPipeline()
@@ -80,50 +117,38 @@ namespace Graphics
 
     }
 
-    void KPipeline::subscribe_buffer(int width, int height, std::string& key)
+    
+
+    void KPipeline::createForwardGL()
     {
-        buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height));
+
     }
-
-    void KPipeline::subscribe_buffer(int width, int height, std::string& key, GLAttachment attachment)
+    void KPipeline::createInstancedGL()
     {
-        buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, Graphics::KAttachment(attachment)));
+
     }
-
-    void KPipeline::subscribe_buffer(int width, int height, std::string& key, GLAttachment* attachments, int size)
+    void KPipeline::createDeferredGL()
     {
-        std::vector<KAttachment> att;
+        renderer_ = std::make_unique<KDeferredRenderer>();
 
-        //initialize the attachments
-        for(int i = 0; i < size; i++)
-            att.push_back(Graphics::KAttachment(attachments[size]));
+         //Culling(avoid seen back faces of the objs)
+        glEnable(GL_CULL_FACE);
 
-        buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, att));
+        glCullFace(GL_BACK); // to draw second pass draw again front faces
+        glFrontFace(GL_CCW);
+
+        // enable test depths
+        glDepthMask(GL_TRUE);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+
+        //subscribe the buffer with three attachments
+        subscribe_buffer(width_, height_, "GBuffer", {ColorHDR, ColorHDR, ColorLDR}, 3 );
+
+
     }
-
-    void KPipeline::subscribe_buffer(int width, int height, std::string& key, std::vector<GLAttachment>& attachments)
+    void KPipeline::createRayTraceGL()
     {
-        std::vector<KAttachment> att;
 
-        //initialize the attachments
-        for(auto& gl: attachments)
-            att.push_back(Graphics::KAttachment(gl));
-
-        buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, Graphics::KAttachment(att)));
-    }
-
-    void KPipeline::subscribe_buffer(int width, int height, std::string& key, KAttachment& attachment)
-    {
-        buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, attachment));
-    }
-
-    void KPipeline::subscribe_buffer(int width, int height, std::string& key, KAttachment* attachments, int size)
-    {
-        buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, attachments, size));
-    }
-
-    void KPipeline::subscribe_buffer(int width, int height, std::string& key, std::vector<KAttachment>& attachments)
-    {
-        buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, attachments));
     }
 }

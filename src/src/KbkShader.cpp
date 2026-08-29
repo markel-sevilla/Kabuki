@@ -10,19 +10,19 @@
  * @version 1.0
  */
  
-#include "Shader.h"
+#include "KShader.h"
 #include "glm/glm.hpp"
 #include "glad/glad.h"
 #include "Log.h"
 
 namespace Graphics
 {
-    Shader::~Shader()
+    KShader::~KShader()
     {
         glDeleteProgram(ID);
     }
 
-    void Shader::LoadShader(const char* vertexPath, const char* fragmentPath)
+    void KShader::LoadShader(const char* vertexPath, const char* fragmentPath)
     {
         std::string vertexCode;
         std::string fragmentCode;
@@ -120,57 +120,57 @@ namespace Graphics
     }
 
     // use my program
-    void Shader::Use()
+    void KShader::Use()
     {
         glUseProgram(ID);
     }
     
-    void Shader::SetUniform(const std::string& name, const glm::vec3& vec) const
+    void KShader::SetUniform(const std::string& name, const glm::vec3& vec) const
     {
         glUniform3f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y, vec.z);
     }
 
-    void Shader::SetUniform(const std::string& name, const glm::vec2& vec) const
+    void KShader::SetUniform(const std::string& name, const glm::vec2& vec) const
     {
         glUniform2f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y);
     }
 
-    void Shader::SetUniform(const std::string& name, const float& f) const
+    void KShader::SetUniform(const std::string& name, const float& f) const
     {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), f);
     }
 
-    void Shader::SetUniform(const std::string& name, const bool& b) const
+    void KShader::SetUniform(const std::string& name, const bool& b) const
     {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), b);
     }
 
-    void Shader::SetUniform(const std::string& name, const glm::mat4& mat) const
+    void KShader::SetUniform(const std::string& name, const glm::mat4& mat) const
     {
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 
-    void Shader::SetUniform(const std::string& name, const size_t& s) const
+    void KShader::SetUniform(const std::string& name, const size_t& s) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), static_cast<GLint>(s));
     }
 
-    void Shader::SetUniform(const std::string& name, const int& i) const
+    void KShader::SetUniform(const std::string& name, const int& i) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), static_cast<GLint>(i));
     }
 
-    void Shader::SetUniform(const std::string& name, const unsigned& i) const
+    void KShader::SetUniform(const std::string& name, const unsigned& i) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), static_cast<GLint>(i));
     }
 
-    void Shader::SetUniform(const std::string& name, const double& i) const
+    void KShader::SetUniform(const std::string& name, const double& i) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), static_cast<GLint>(i));
     }
 
-    void Shader::SetUniform(const std::string& name, const glm::vec3* i) const
+    void KShader::SetUniform(const std::string& name, const glm::vec3* i) const
     {
         glUniform3fv(glGetUniformLocation(ID, name.c_str()), 256, &i[0][0]);
     }
