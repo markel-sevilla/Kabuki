@@ -19,12 +19,12 @@
 namespace Graphics
 {
 
-    KPipeline* KPipeline::kCreateGLPipeline(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true)
+    KPipeline* KPipeline::kCreatePipelineGL(int width, int height, KRenderType type, bool resizeable , bool hintVisible )
     {
         return new KPipeline(width, height, KAPI::GL, type, resizeable, hintVisible);
     }
     
-    KPipeline* KPipeline::kCreateVKPipeline(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true)
+    KPipeline* KPipeline::kCreatePipelineVK(int width, int height, KRenderType type, bool resizeable, bool hintVisible)
     {
         return new KPipeline(width, height, KAPI::VK, type, resizeable, hintVisible);
     }
@@ -117,8 +117,6 @@ namespace Graphics
 
     }
 
-    
-
     void KPipeline::createForwardGL()
     {
 
@@ -129,23 +127,7 @@ namespace Graphics
     }
     void KPipeline::createDeferredGL()
     {
-        renderer_ = std::make_unique<KDeferredRenderer>();
-
-         //Culling(avoid seen back faces of the objs)
-        glEnable(GL_CULL_FACE);
-
-        glCullFace(GL_BACK); // to draw second pass draw again front faces
-        glFrontFace(GL_CCW);
-
-        // enable test depths
-        glDepthMask(GL_TRUE);
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-
-        //subscribe the buffer with three attachments
-        subscribe_buffer(width_, height_, "GBuffer", {ColorHDR, ColorHDR, ColorLDR}, 3 );
-
-
+        renderer_ = std::make_unique<KDeferredRenderer>(size_.x, size_.y);
     }
     void KPipeline::createRayTraceGL()
     {

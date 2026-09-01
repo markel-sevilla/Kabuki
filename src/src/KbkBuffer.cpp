@@ -37,8 +37,46 @@ namespace Graphics
         return {};
     }
 
+	KBuffer::KBuffer(int width, int height) 
+    {
+        glGenFramebuffers(1, &handle_);
+	    glBindFramebuffer(GL_FRAMEBUFFER , handle_);
+        
 
+		std::vector<GLuint> attachmentsToDraw;
+		
+		KAttachment att;
 
+		//standard color buffer 
+	    glGenTextures(1, &att.getHandle());
+	    glBindTexture(GL_TEXTURE_2D, att.getHandle());
+
+		glTexImage2D(GL_TEXTURE_2D, 0, att.getFormat().internalFormat_, width, height, 0, att.getFormat().format_, att.getFormat().type_, NULL);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
+		//see if the attachment is clamped 
+		if(att.getFormat().clamped)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		}
+		
+	    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, att.getHandle(), 0);
+		
+		// push back the attachments to later draw them
+		attachmentsToDraw.push_back(GL_COLOR_ATTACHMENT0);
+		
+		// Tell OpenGL which color attachments we'll use (of this framebuffer) for rendering
+    	glDrawBuffers(attachmentsToDraw.size(), &attachmentsToDraw[0]);
+
+		// Check if framebuffer is complete
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			std::cerr << "Framebuffer not complete!" << std::endl;
+
+    	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	
     KBuffer::KBuffer(int width, int height, std::vector<KAttachment>& attachments)
     {
         glGenFramebuffers(1, &handle_);

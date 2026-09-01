@@ -49,6 +49,8 @@ namespace Graphics
         static KPipeline* kCreatePipelineGL(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true);
         static KPipeline* kCreatePipelineVK(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true);
 
+        ~KPipeline();
+
         private:
 
 
@@ -62,12 +64,6 @@ namespace Graphics
         */
         
         KPipeline( int width, int height, KAPI api = KAPI::GL, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true);
-        
-        KPipelineConfig glConfig_;
-        ~KPipeline();
-
-        
-        private:
         
         /**
         * @brief  It loads the glfw pipeline with glad  
@@ -106,7 +102,7 @@ namespace Graphics
         void createRayTraceGL();
 
         std::unique_ptr<KRenderer> renderer_;
-        glm::vec2 size_;
+        glm::ivec2 size_;
         KAPI api_;
         KRenderType type_;
         bool resizeable_;

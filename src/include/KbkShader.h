@@ -29,11 +29,11 @@ namespace Graphics
         * @brief  It constructs the shader  
         * @return void 
         */
-        Shader() {
+        KShader() {
             ID = 0;
         }
         
-        ~Shader();
+        ~KShader();
         
         /**
         * @brief  It loads the shader from a vertex and a fragment  

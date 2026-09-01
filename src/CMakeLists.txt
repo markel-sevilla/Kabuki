@@ -14,15 +14,17 @@ add_executable(${PROJECT_NAME}
             include/KbkPipeline.h
             include/KbkStage.h
             include/Log.h
-            include/Shader.h
+            include/KbkShader.h
+            include/KbkRenderer.h
             include/Sink.h
             src/KbkBuffer.cpp
             src/KbkPipeline.cpp
+            src/KbkRenderer.cpp
             src/main.cpp
             src/Camera.cpp
             src/DebuggingInstance.cpp
             src/KbkStage.cpp
-            src/Shader.cpp)
+            src/KbkShader.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC 
     .

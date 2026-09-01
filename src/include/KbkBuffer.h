@@ -1,9 +1,10 @@
+# pragma once
+
 #include <vector>
 #include "glad/glad.h"
 
 namespace Graphics
 {
-
     enum class GLAttachment {
         ColorHDR,       // RGBA16F - para posición, color HDR, etc.
         ColorLDR,       // RGBA8 - color normal 0-1

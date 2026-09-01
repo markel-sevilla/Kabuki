@@ -10,7 +10,7 @@
  * @version 1.0
  */
 #include "KbkStage.h"
-#include "Shader.h"
+#include "KbkShader.h"
 
 namespace Graphics
 {

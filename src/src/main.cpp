@@ -10,9 +10,7 @@
 int main()
 {
 
-    Graphics::KPipeline* pipeline = std::unique_ptr<Graphics::KPipeline>(kCreateGLPipeline(1600, 900, DEF, true, true)).get();
-
-    
+    Graphics::KPipeline* pipeline = std::unique_ptr<Graphics::KPipeline>(Graphics::KPipeline::kCreatePipelineGL(1600, 900, Graphics::KRenderType::DEF, true, true)).get();
 
 //     renderer->ReloadShaders();
 //     LOG_TRACE("Reloaded the shaders" );
