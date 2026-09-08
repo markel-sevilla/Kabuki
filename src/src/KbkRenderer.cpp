@@ -1,5 +1,6 @@
 
 #include "KbkRenderer.h"
+#include "Log.h"
 
 /**
  * @file    KRenderer.cpp
@@ -18,10 +19,10 @@
 
     KDeferredRenderer::KDeferredRenderer(int width, int height) : KRenderer::KRenderer(width, height)
     {
-        GLAttachment att[3] = {Graphics::GLAttachment::ColorHDR, Graphics::GLAttachment::ColorHDR, Graphics::GLAttachment::ColorLDR};
+        GLAttachment att[4] = {Graphics::GLAttachment::ColorHDR, Graphics::GLAttachment::ColorHDR, Graphics::GLAttachment::ColorLDR, Graphics::GLAttachment::Depth };
         
         //subscribe the buffer with three attachments
-        subscribeBuffer(width_, height_, "GBuffer", att, 3 );
+        subscribeBuffer(width_, height_, "GBuffer", att, 4);
         
         //Culling(avoid seen back faces of the objs)
         glEnable(GL_CULL_FACE);
@@ -72,7 +73,7 @@
 
         //initialize the attachments
         for(int i = 0; i < size; i++)
-            att.push_back(Graphics::KAttachment(attachments[size]));
+            att.push_back(Graphics::KAttachment(attachments[i]));
 
         buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, att));
     }
@@ -87,6 +88,7 @@
 
         buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, att));
     }
+
 
     void KRenderer::subscribeBuffer(int width, int height, const std::string& key, KAttachment& attachment)
     {

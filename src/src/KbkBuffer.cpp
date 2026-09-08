@@ -11,6 +11,7 @@
  */
 #include "KbkBuffer.h"
 #include <iostream>
+#include "Log.h"
 
 namespace Graphics
 {
@@ -70,9 +71,11 @@ namespace Graphics
 		// Tell OpenGL which color attachments we'll use (of this framebuffer) for rendering
     	glDrawBuffers(attachmentsToDraw.size(), &attachmentsToDraw[0]);
 
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		
 		// Check if framebuffer is complete
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cerr << "Framebuffer not complete!" << std::endl;
+		if ( status != GL_FRAMEBUFFER_COMPLETE)
+			isFrameBufferComplete(status);
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -90,7 +93,7 @@ namespace Graphics
         for(auto& att : attachments)
         {
 			// depth case is handled later 
-			if(att.getFormat().attachmentPoint_ == GL_DEPTH_ATTACHMENT)
+			if(att.getFormat().format_ == GL_DEPTH_COMPONENT)
 			{
 				depth = att;
 				continue;
@@ -116,7 +119,7 @@ namespace Graphics
 			attachmentsToDraw.push_back(GL_COLOR_ATTACHMENT0 + i++);
         }
 		
-    	// Tell OpenGL which color attachments we�ll use (of this framebuffer) for rendering
+    	// Tell OpenGL which color attachments well use (of this framebuffer) for rendering
     	glDrawBuffers(attachmentsToDraw.size(), &attachmentsToDraw[0]);
 
     	// Create and attach depth buffer 
@@ -133,10 +136,10 @@ namespace Graphics
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth.getHandle(), 0);
 		}
 		
-
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		// Check if framebuffer is complete
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cerr << "Framebuffer not complete!" << std::endl;
+		if ( status != GL_FRAMEBUFFER_COMPLETE)
+			isFrameBufferComplete(status);
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
@@ -199,9 +202,11 @@ namespace Graphics
 		}
 		
 
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		// Check if framebuffer is complete
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cerr << "Framebuffer not complete!" << std::endl;
+		if ( status != GL_FRAMEBUFFER_COMPLETE)
+			isFrameBufferComplete(status);
+
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
@@ -231,10 +236,42 @@ namespace Graphics
 		GLuint attachment = GL_COLOR_ATTACHMENT0;
     	glDrawBuffers(1, &attachment);
 
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		// Check if framebuffer is complete
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cerr << "Framebuffer not complete!" << std::endl;
+		if (status != GL_FRAMEBUFFER_COMPLETE)
+			isFrameBufferComplete(status);
+
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void KBuffer::isFrameBufferComplete(GLenum status)
+	{
+		switch (status)
+		{
+		    case GL_FRAMEBUFFER_UNDEFINED:
+		        LOG_ERROR("GL_FRAMEBUFFER_UNDEFINED");
+		        break;
+		
+		    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+		        LOG_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+		        break;
+		
+		    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+		        LOG_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
+		        break;
+		
+		    case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+		        LOG_ERROR("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
+		        break;
+		
+		    case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+		        LOG_ERROR("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER");
+		        break;
+		
+		    case GL_FRAMEBUFFER_UNSUPPORTED:
+		        LOG_ERROR("GL_FRAMEBUFFER_UNSUPPORTED");
+		        break;
+		}
 	}
 }

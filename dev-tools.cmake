@@ -15,7 +15,6 @@ if(CMake_RUN_CLANG_TIDY)
             include/Camera.h
             include/KbkBuffer.h
             include/DebuggingInstance.h
-            include/KbkPipelineConfig.h
             include/KbkStage.h
             include/Log.h
             include/Shader.h

@@ -10,7 +10,6 @@ add_executable(${PROJECT_NAME}
 		    include/Camera.h
             include/KbkBuffer.h
             include/DebuggingInstance.h
-            include/KbkPipelineConfig.h
             include/KbkPipeline.h
             include/KbkStage.h
             include/Log.h

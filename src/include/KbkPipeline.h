@@ -16,10 +16,13 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
-#include "KbkPipelineConfig.h"
+
 #include "KbkStage.h"
 #include "KbkBuffer.h"
 #include "KbkRenderer.h"
+
+class GLFWwindow;
+class Camera;
 
 namespace Graphics
 {
@@ -46,13 +49,36 @@ namespace Graphics
 
         public:
 
-        static KPipeline* kCreatePipelineGL(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true);
-        static KPipeline* kCreatePipelineVK(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true);
+        static std::unique_ptr<KPipeline> kCreatePipelineGL(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true);
+        static std::unique_ptr<KPipeline> kCreatePipelineVK(int width, int height, KRenderType type = KRenderType::FWD , bool resizeable = true, bool hintVisible = true);
 
+        /**
+        * @brief  It renders tehe current frame   
+        * @param[in] width: GLFW camera 
+        * @return void 
+        */
+        void render(Camera* cam);
+
+        /**
+        * @brief  sets the clear color   
+        * @param[in] rgba: clear color for the window 
+        * @return void 
+        */
+
+        void setClearColor(const glm::vec4& rgba);
+        
         ~KPipeline();
+        
+        /**
+        * @brief  returns the window   
+        * @return void 
+        */
+        GLFWwindow* getWindow() const 
+        {
+            return window_;
+        }
 
         private:
-
 
         /**
         * @brief  It constructs the pipeline itself  
@@ -105,8 +131,10 @@ namespace Graphics
         glm::ivec2 size_;
         KAPI api_;
         KRenderType type_;
+        GLFWwindow* window_; 
         bool resizeable_;
         bool hintVisible_;
+        glm::vec4 clearColor_;
         
     };
 }

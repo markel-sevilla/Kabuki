@@ -11,22 +11,86 @@
  */
 #include "KbkPipeline.h"
 #include "KbkStage.h"
-#include "KbkPipelineConfig.h"
 #include "Log.h"
+#include "Camera.h"
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 
 namespace Graphics
 {
 
-    KPipeline* KPipeline::kCreatePipelineGL(int width, int height, KRenderType type, bool resizeable , bool hintVisible )
+    //Helper function defined to debug shaders
+    void APIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint /*id*/, GLenum severity, GLsizei /*length*/, const GLchar* message, const void* /*userParam*/)
+	{
+
+		std::stringstream stream;
+		stream << message << '\n';
+
+		//take the source and check where the error is coming from
+		switch (source)
+		{
+		case  GL_DEBUG_SOURCE_API:
+			stream << "Source: API";
+			break;
+
+		case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+			stream << "Source: Window Manager";
+			break;
+
+		case GL_DEBUG_SOURCE_SHADER_COMPILER:
+			stream << "Source: Shader Compiler";
+			break;
+
+		case GL_DEBUG_SOURCE_THIRD_PARTY:
+			stream << "Source: Third Party";
+			break;
+
+		case GL_DEBUG_SOURCE_APPLICATION:
+			stream << "Source: Application";
+			break;
+
+		case GL_DEBUG_SOURCE_OTHER:
+			stream << "Source: Other";
+			break;
+
+		default:break;
+		}
+
+		stream << '\n';
+
+		// checkj the severity 
+		switch (severity)
+		{
+		case GL_DEBUG_SEVERITY_HIGH:
+			stream << "Severity: HIGH [ERROR]"; // this is an error
+			break;
+
+		case GL_DEBUG_SEVERITY_MEDIUM:
+			stream << "Severity: MEDIUM [WARNING]"; // warning
+			break;
+
+		case GL_DEBUG_SEVERITY_LOW:
+			stream << "Severity: LOW [WARNING]"; // warning
+			break;
+
+		case GL_DEBUG_SEVERITY_NOTIFICATION:
+			stream << "Severity: NOTIFICATION [INFO]"; // just information
+			return;
+
+		default:break;
+		}
+
+		std::cerr << "OpenGL :" << type << std::endl << stream.str() << std::endl;
+	}
+
+    std::unique_ptr<KPipeline> KPipeline::kCreatePipelineGL(int width, int height, KRenderType type, bool resizeable , bool hintVisible )
     {
-        return new KPipeline(width, height, KAPI::GL, type, resizeable, hintVisible);
+        return std::unique_ptr<KPipeline>(new KPipeline(width, height, KAPI::GL, type, resizeable, hintVisible));
     }
     
-    KPipeline* KPipeline::kCreatePipelineVK(int width, int height, KRenderType type, bool resizeable, bool hintVisible)
+    std::unique_ptr<KPipeline> KPipeline::kCreatePipelineVK(int width, int height, KRenderType type, bool resizeable, bool hintVisible)
     {
-        return new KPipeline(width, height, KAPI::VK, type, resizeable, hintVisible);
+        return std::unique_ptr<KPipeline>(new KPipeline(width, height, KAPI::VK, type, resizeable, hintVisible));
     }
 
     KPipeline::KPipeline(int width, int height, KAPI api, KRenderType type, bool resizeable, bool hintVisible) : 
@@ -34,10 +98,20 @@ namespace Graphics
                          type_(type),                     
                          size_ {width, height},
                          resizeable_(resizeable),
-                         hintVisible_(hintVisible) 
+                         hintVisible_(hintVisible),
+                         clearColor_({0,0,0,1}) 
     {
         initGLFWPipeline(width, height, resizeable, hintVisible);
         
+        // Enable debug output
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // Optional, forces synchronous callback
+
+		//// Set the debug message callback
+		glDebugMessageCallback(GLDebugMessageCallback, NULL);
+
+        LOG_TRACE("GLFW Initialized");
+
         switch( type_ )
         {
             // we create the forward pipeline
@@ -65,7 +139,21 @@ namespace Graphics
 
     KPipeline::~KPipeline()
     {
+        LOG_TRACE("Destroy K-Pipeline");
         glfwTerminate();
+    }
+
+    void KPipeline::setClearColor(const glm::vec4& rgba)
+    {
+        clearColor_ = rgba;
+    }
+    void KPipeline::render(Camera* cam)
+    {
+        glClearColor(clearColor_.x, clearColor_.y, clearColor_.z, clearColor_.w); // keep it black so it doesn't leak into g-buffer
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // here we render with the renderer
+        //renderer_->draw( cam );
     }
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
@@ -74,7 +162,7 @@ namespace Graphics
 
     int KPipeline::initGLFWPipeline(int width, int height, bool resizeWindow, bool hintVisible)
     {
-        srand(static_cast<unsigned int>(std::time(0)));
+        //srand(static_cast<unsigned int>(std::time(0)));
 
         //initialize the glfw context
         glfwInit();
@@ -88,9 +176,9 @@ namespace Graphics
         glfwWindowHint(GLFW_VISIBLE, static_cast<int>(hintVisible));
 
         //Create the window
-        GLFWwindow* window = glfwCreateWindow(width, height, "CS562", NULL, NULL);
+        window_ = glfwCreateWindow(width, height, "K-Lib", NULL, NULL);
 
-        if (window == NULL)
+        if (window_ == NULL)
         {
             //In case of error
             LOG_TRACE("Failed to create GLFW window");
@@ -99,8 +187,8 @@ namespace Graphics
         }
 
         //create the context for the window
-        glfwMakeContextCurrent(window);
-        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+        glfwMakeContextCurrent(window_);
+        glfwSetFramebufferSizeCallback(window_, framebuffer_size_callback);
 
         //check that we have the correct glaad initialized
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -115,6 +203,7 @@ namespace Graphics
 
         glfwSwapInterval(0);
 
+        return 1;
     }
 
     void KPipeline::createForwardGL()
@@ -127,6 +216,7 @@ namespace Graphics
     }
     void KPipeline::createDeferredGL()
     {
+        LOG_TRACE("Initialize DEFERRED OpenGL renderer");
         renderer_ = std::make_unique<KDeferredRenderer>(size_.x, size_.y);
     }
     void KPipeline::createRayTraceGL()

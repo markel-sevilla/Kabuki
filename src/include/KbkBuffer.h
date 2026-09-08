@@ -96,6 +96,7 @@ namespace Graphics
 
         private:
 
+        void isFrameBufferComplete(GLenum status);
         GLuint handle_;
         uint32_t width_, height;
         GLAttachmentStorage storage_;

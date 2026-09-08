@@ -34,24 +34,24 @@ namespace Demo
         
        Camera(float Fovy, float Width, float Height,
            float Near, float Far,
-           glm::vec3 Position, glm::vec3 Target, glm::vec3 Up);
+           glm::vec3 Position, glm::vec3 Rotate);
 
         
-       ~Camera() = default;
+       ~Camera();
        
         /**
         * @brief  Updates the matrices of the cameras 
         * @param[in] window : GLFW Window to update 
         * @return void 
         */
-        void Update(GLFWwindow* window);
+        void update(GLFWwindow* window);
 
         /**
         * @brief  It polls the input from the glfw window  
         * @param[in] window : GLFW Window to update 
         * @return void 
         */
-        void GetInput(GLFWwindow* window);
+        void getInput(GLFWwindow* window);
     
     private :
         // camera matrices

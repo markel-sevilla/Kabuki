@@ -1,8 +1,9 @@
-
+#include <glad/glad.h>
+#include <glfw/glfw3.h>
 #include <iostream>
 #include <ctime>
-#include "KbkPipelineConfig.h"
 #include "KbkPipeline.h"
+#include "Camera.h"
 #include "Log.h"
 #include <memory>
 
@@ -10,9 +11,15 @@
 int main()
 {
 
-    Graphics::KPipeline* pipeline = std::unique_ptr<Graphics::KPipeline>(Graphics::KPipeline::kCreatePipelineGL(1600, 900, Graphics::KRenderType::DEF, true, true)).get();
+    //init the pipeline
+    auto pipeline = Graphics::KPipeline::kCreatePipelineGL(1600, 900, Graphics::KRenderType::DEF, true, true);
+    
+    //init the camera
+    auto cam = std::make_unique<Demo::Camera>(glm::radians(60.0), 1600.f, 900.f, 0.1f, 500.0f, glm::vec3(-90, 40, -20), glm::vec3(0,90,0));
 
-//     renderer->ReloadShaders();
+
+
+    //     renderer->ReloadShaders();
 //     LOG_TRACE("Reloaded the shaders" );
 
 //     renderer->ReloadScene();
@@ -34,15 +41,25 @@ int main()
    
 
 
-//     while (!glfwWindowShouldClose(window))
+
+    while (!glfwWindowShouldClose(pipeline->getWindow()))
+    {
+        glfwSwapBuffers(pipeline->getWindow());
+        glfwPollEvents();
+
+        // here we update the camera matrices 
+         cam->update(pipeline->getWindow());
+
+        // and here we call the rendere func
+        //pipeline->render(cam->);
+    }
 //     {
 //         renderer->ProcessInput(window);
 //         /// Start the ImGui frame
 //         renderer->ImguiDisplay();
 
 //         // 1. geometry pass: render all geometric/color data to g-buffer 
-//         glClearColor(0.0, 0.0, 0.0, 1.0); // keep it black so it doesn't leak into g-buffer
-//         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//         
         
 
 //         //update cameras
@@ -178,6 +195,8 @@ int main()
 //     }
 
     //terminate the framework
+
+    LOG_TRACE("Finish demo");
 
     return 0;
     

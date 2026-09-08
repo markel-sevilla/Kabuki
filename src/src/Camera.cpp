@@ -13,16 +13,29 @@
 #include "Camera.h"
 #include <glm/gtx/transform.hpp>
 #include "glfw/glfw3.h"
+#include "Log.h"
+
 
 #define STEP 5.F
 
+// TODO : need to change identation for camera members from mCam to cam_
 namespace Demo
 {
  
     Camera::Camera(float Fovy, float Width, float Height,
         float Near, float Far,
-        glm::vec3 Position, glm::vec3 Target, glm::vec3 Up)
+        glm::vec3 Position, glm::vec3 Rotate )
     {
+        glm::vec3 Dir = glm::rotate(glm::mat4(1), glm::radians(Rotate.x), glm::vec3(1, 0, 0)) *
+				glm::rotate(glm::mat4(1), glm::radians(Rotate.y), glm::vec3(0, 1, 0)) *
+				glm::rotate(glm::mat4(1), glm::radians(Rotate.z), glm::vec3(0, 0, 1)) * glm::vec4(0, 0, 1, 0);
+
+		glm::vec3 Up = glm::rotate(glm::mat4(1), glm::radians(Rotate.x), glm::vec3(1, 0, 0)) *
+				glm::rotate(glm::mat4(1), glm::radians(Rotate.y), glm::vec3(0, 1, 0)) *
+				glm::rotate(glm::mat4(1), glm::radians(Rotate.z), glm::vec3(0, 0, 1)) * glm::vec4(0, 1, 0, 0);
+
+		glm::vec3 Target = Position + Dir;
+
         mView = glm::mat4(1);
         mProjection = glm::mat4(1);
         //specific variables 
@@ -52,11 +65,18 @@ namespace Demo
         mView = glm::lookAt(mCamPos, mCamTarget, mCamUp);
 
         mCursor = glm::vec2(0);
+
+        LOG_TRACE("Camera was created succesfully");
     }
 
-    void Camera::Update(GLFWwindow* window)
+    Camera::~Camera()
     {
-        GetInput(window);
+        LOG_TRACE("Camera was succesfully deleted!");
+    }
+    
+    void Camera::update(GLFWwindow* window)
+    {
+        getInput(window);
 
         //update vectors
         mCamTarget = mCamPos + mCamFront;
@@ -65,7 +85,7 @@ namespace Demo
         mView = glm::lookAt(mCamPos, mCamTarget, mCamUp);
     }
 
-    void Camera::GetInput(GLFWwindow* window)
+    void Camera::getInput(GLFWwindow* window)
     {
         // It gets the cursor and fetchges its position at this poiunt of the frame
         double cursor_x = 0;
