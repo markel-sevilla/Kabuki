@@ -53,6 +53,20 @@ namespace Demo
         */
         void getInput(GLFWwindow* window);
     
+        /**
+        * @brief  It accesses the projection matrix  
+        */
+        const glm::mat4& getProj() { 
+            return mProjection; 
+        }
+
+        /**
+        * @brief  It accesses the view matrix  
+        */
+        const glm::mat4& getView(){
+            return mView;
+        };
+
     private :
         // camera matrices
         glm::mat4 mProjection;

@@ -40,8 +40,6 @@ int main()
 //    // renderer->mScene->DrawHathcingTextures(renderer->mHatchingShader, renderer->mCam);
    
 
-
-
     while (!glfwWindowShouldClose(pipeline->getWindow()))
     {
         glfwSwapBuffers(pipeline->getWindow());

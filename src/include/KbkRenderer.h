@@ -42,7 +42,7 @@ namespace Graphics
         /**
         * @brief  It overrides the drawing of each of the 
         */
-        virtual void draw() = 0;
+        virtual void draw(const glm::mat4& view, const glm::mat4& proj) = 0;
         
         protected:
          /**
@@ -133,7 +133,7 @@ namespace Graphics
     {
         //KForwardRenderer();
 
-        void draw() override;
+        void draw(const glm::mat4& view, const glm::mat4& proj) override;
     };
 
     class KInstancedRenderer : public KRenderer
@@ -141,7 +141,7 @@ namespace Graphics
 
         //KInstancedRenderer();
 
-        void draw() override;
+        void draw(const glm::mat4& view, const glm::mat4& proj) override;
     };
 
     class KDeferredRenderer : public KRenderer
@@ -149,13 +149,13 @@ namespace Graphics
     public: 
         KDeferredRenderer(int width, int height);
 
-        void draw() override;
+        void draw(const glm::mat4& view, const glm::mat4& proj) override;
     };
 
     class KRayTraceRenderer : public KRenderer
     {
         //KRayTraceRenderer();
 
-        void draw() override;
+        void draw(const glm::mat4& view, const glm::mat4& proj) override;
     };
 }

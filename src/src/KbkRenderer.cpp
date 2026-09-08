@@ -35,22 +35,22 @@
         glDepthFunc(GL_LESS);
 
     }
-    void KDeferredRenderer::draw()
+    void KDeferredRenderer::draw(const glm::mat4& view, const glm::mat4& proj)
     {
 
     }
 
-    void KForwardRenderer::draw()
+    void KForwardRenderer::draw(const glm::mat4& view, const glm::mat4& proj)
     {
 
     }
 
-    void KInstancedRenderer::draw()
+    void KInstancedRenderer::draw(const glm::mat4& view, const glm::mat4& proj)
     {
 
     }
 
-    void KRayTraceRenderer::draw()
+    void KRayTraceRenderer::draw(const glm::mat4& view, const glm::mat4& proj)
     {
 
     }

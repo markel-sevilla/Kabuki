@@ -57,7 +57,7 @@ namespace Graphics
         * @param[in] width: GLFW camera 
         * @return void 
         */
-        void render(Camera* cam);
+        void render(const glm::mat4& view, const glm::mat4& proj );
 
         /**
         * @brief  sets the clear color   

@@ -147,13 +147,13 @@ namespace Graphics
     {
         clearColor_ = rgba;
     }
-    void KPipeline::render(Camera* cam)
+    void KPipeline::render(const glm::mat4& view, const glm::mat4& proj)
     {
         glClearColor(clearColor_.x, clearColor_.y, clearColor_.z, clearColor_.w); // keep it black so it doesn't leak into g-buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // here we render with the renderer
-        //renderer_->draw( cam );
+        renderer_->draw( view, proj );
     }
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
