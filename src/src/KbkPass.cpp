@@ -16,13 +16,15 @@ namespace Graphics
 {
 
     
-    static std::unique_ptr<KPass> KPass::createPass(KShader* shader, PassType type)
+    std::unique_ptr<KPass> KPass::createPass(const char* vPath, const char* fPath, PassType type)
     {
         switch(type)
         {
-            case PassType::GPass:
-
-                return std::unique_ptr<KPass>(static_cast<KPass*>(new GPass(shader)));
+            case PassType::GPass: // create the GPass with its shader
+                return std::unique_ptr<KPass>(static_cast<KPass*>(new GPass(new KShader(vPath, fPath))));
+            
+            default:
+                return nullptr;
         }
     }
 
@@ -36,7 +38,7 @@ namespace Graphics
    
     void GPass::execute()
     {
-        bindFrameBuffer(buffers_["GBuffer"]);
+        bindFrameBuffer(buffers_["GBuffer"]->getHandle());
     }
 
     void KPass::bindFrameBuffer(GLuint buffer) const

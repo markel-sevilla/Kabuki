@@ -29,20 +29,17 @@ namespace Graphics
         * @brief  It constructs the shader  
         * @return void 
         */
-        KShader() {
-            ID = 0;
-        }
-        
-        ~KShader();
-        
+        KShader() = delete;
+
         /**
-        * @brief  It loads the shader from a vertex and a fragment  
-        * @param[in] vertexPath: vertex shader path
-        * @param[in] fragmentPath: fragment shader path
+        * @brief  It constructs the shader  
+        * @param[in] vPath: vertex path
+        * @param[in] fPath: fragment path
         * @return void 
         */
+        explicit KShader(const char* vertexPath, const char* fragmentPath);
         
-        void LoadShader(const char* vertexPath, const char* fragmentPath);
+        ~KShader();
 
         /**
         * @brief  Sets a program in use
@@ -66,5 +63,16 @@ namespace Graphics
         void SetUniform(const std::string& name, const unsigned& i) const;
         void SetUniform(const std::string& name, const double& i) const;
         void SetUniform(const std::string& name, const glm::vec3* i) const;
+
+
+          private:
+        /**
+        * @brief  It loads the shader from a vertex and a fragment  
+        * @param[in] vertexPath: vertex shader path
+        * @param[in] fragmentPath: fragment shader path
+        * @return void 
+        */
+        
+        void LoadShader(const char* vertexPath, const char* fragmentPath);
     };
 }

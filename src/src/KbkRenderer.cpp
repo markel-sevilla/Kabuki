@@ -22,13 +22,12 @@
         GLAttachment att[4] = {Graphics::GLAttachment::ColorHDR, Graphics::GLAttachment::ColorHDR, Graphics::GLAttachment::ColorLDR, Graphics::GLAttachment::Depth };
         
         //subscribe the pass 
-        auto pass = subscribePass(shader, PassType::GPass);
+        auto pass = subscribePass("data/shaders/geometryVertex.vs", "data/shaders/geometryFragment.fs", PassType::GPass);
 
         //subscribe the buffer with three attachments
         pass->subscribeBuffer(width_, height_, "GBuffer", att, 4);
 
 
-        
         //Culling(avoid seen back faces of the objs)
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK); // to draw second pass draw again front faces
@@ -41,11 +40,16 @@
 
     }
 
-    std::unique_ptr<KPass> KRenderer::subscribePass(Shader* shader, PassType type)
+    KPass* KRenderer::getLastPass() const 
     {
-        passes_.push_back(createPass(shader, type_));
+        return passes_.back().get();
+    }
 
-        return passes_.back();
+    KPass* KRenderer::subscribePass(const char* vPath, const char* fPath, PassType type)
+    {
+        passes_.push_back(KPass::createPass(vPath, fPath, type));
+
+        return getLastPass();
     }
 
     void KDeferredRenderer::draw(const glm::mat4& view, const glm::mat4& proj)

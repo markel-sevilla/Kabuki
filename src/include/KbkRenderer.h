@@ -14,7 +14,6 @@
 
 #include <glm/vec2.hpp>
 #include <vector>
-#include <unordered_map>
 #include <memory>
 #include "KbkPass.h"
 
@@ -43,8 +42,20 @@ namespace Graphics
         */
         virtual void draw(const glm::mat4& view, const glm::mat4& proj) = 0;
         
-        std::unique_ptr<KPass> subscribePass(Shader* shader, PassType type_);
+        /**
+        * @brief  It attaches a pass to a renderer
+        * @param[in] vPath: vertex shader
+        * @param[in] fPath: fragment shader   
+        * @param[in] pass type: type of the pass to create   
+        */
+
+        KPass* subscribePass(const char* vPath, const char* fPath, PassType type_);
         
+        /**
+        * @brief  It gets the las pass of a renderer
+        */
+        KPass* getLastPass() const;
+
         protected:
         int width_, height_;
         std::vector<std::unique_ptr<KPass>> passes_;

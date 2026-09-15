@@ -17,6 +17,11 @@
 
 namespace Graphics
 {
+    KShader::KShader(const char* vPath, const char* fPath)
+    {
+        LoadShader(vPath, fPath);
+    }
+
     KShader::~KShader()
     {
         glDeleteProgram(ID);

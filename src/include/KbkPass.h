@@ -29,7 +29,7 @@ namespace Graphics
     };
 
     class KShader;
-    
+
     class KPass
     {
         public:
@@ -39,7 +39,7 @@ namespace Graphics
         * @param[in] shader: shader that is going to be executed
         * @return void 
         */
-        static std::unique_ptr<KPass> createPass(KShader* shader, PassType type);
+        static std::unique_ptr<KPass> createPass(const char* vPath, const char* fPath, PassType type);
         
 
         KPass() = default;
@@ -146,6 +146,8 @@ namespace Graphics
     class GPass : public KPass
     {
 
+        public:
+        
         GPass() = delete;
         GPass(const GPass& pass) = delete;
         void operator=(const GPass& pass) = delete;
