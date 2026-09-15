@@ -17,8 +17,7 @@
 #include <unordered_map>
 #include <memory>
 #include "KbkPass.h"
-#include "KbkBuffer.h"
-#include "KbkShader.h"
+
 
 namespace Graphics
 {
@@ -44,89 +43,11 @@ namespace Graphics
         */
         virtual void draw(const glm::mat4& view, const glm::mat4& proj) = 0;
         
-        protected:
-         /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-        *         This variance creates an HDR color buffer (standard texture)
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @return void 
-        */
-        GLuint subscribeBuffer(int width, int height, const std::string& key);
+        std::unique_ptr<KPass> subscribePass(Shader* shader, PassType type_);
         
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with various textures
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height, const std::string& key, std::vector<KAttachment>& attachments);
-
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with various textures explicitly created through the structs
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @param[in] size: number of attachments
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height,  const std::string& key, KAttachment* attachment, int size);
-
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with a single customized attachment
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments 
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height,  const std::string& key, KAttachment& attachment);
-
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with various textures implicitly created
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height, const std::string& key, std::vector<GLAttachment>& attachments);
-
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with various textures implicitly created
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @param[in] size: number of attachments
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height, const std::string& key, GLAttachment* attachments, int size);
-
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with a single texture created implicitly
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height, const std::string& key, GLAttachment attachment);
-
+        protected:
         int width_, height_;
-        std::unordered_map<std::string, std::unique_ptr<KShader>> shaders_; 
-        std::unordered_map<std::string, std::unique_ptr<KBuffer>> buffers_; 
-        std::vector<std::unique_ptr<KPass>> stages_;
+        std::vector<std::unique_ptr<KPass>> passes_;
     };
 
     class KForwardRenderer : public KRenderer

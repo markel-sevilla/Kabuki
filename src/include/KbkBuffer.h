@@ -65,6 +65,7 @@ namespace Graphics
         GLTarget getTarget() const { return target_; }
        
         private:
+
         GLuint handle_; // texture handler
         GLFormatInfo format_;
         GLTarget target_;
@@ -99,7 +100,7 @@ namespace Graphics
         * @return handle  
         */
         GLuint getHandle() { return handle_; }
-        
+
         private:
 
         void isFrameBufferComplete(GLenum status);
