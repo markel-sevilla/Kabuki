@@ -10,7 +10,7 @@
  * @version 1.0
  */
 #include "KbkPipeline.h"
-#include "KbkStage.h"
+#include "KbkPass.h"
 #include "Log.h"
 #include "Camera.h"
 #include <glad/glad.h>

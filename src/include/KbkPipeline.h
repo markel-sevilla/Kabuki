@@ -17,7 +17,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "KbkStage.h"
+#include "KbkPass.h"
 #include "KbkBuffer.h"
 #include "KbkRenderer.h"
 
@@ -26,7 +26,7 @@ class Camera;
 
 namespace Graphics
 {
-    class KStage;
+    class KPass;
 
     enum class KAPI
     {

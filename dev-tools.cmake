@@ -15,13 +15,13 @@ if(CMake_RUN_CLANG_TIDY)
             include/Camera.h
             include/KbkBuffer.h
             include/DebuggingInstance.h
-            include/KbkStage.h
+            include/KbkPass.h
             include/Log.h
             include/Shader.h
             src/KbkBuffer.cpp
             src/Camera.cpp
             src/DebuggingInstance.cpp
-            src/KbkStage.cpp
+            src/KbkPass.cpp
             src/Shader.cpp
             )
         add_custom_target(

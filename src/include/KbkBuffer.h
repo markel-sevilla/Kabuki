@@ -94,6 +94,12 @@ namespace Graphics
         KBuffer(int width, int height);
         
 
+        /**
+        * @brief  It retrieves the handle to the buffer  
+        * @return handle  
+        */
+        GLuint getHandle() { return handle_; }
+        
         private:
 
         void isFrameBufferComplete(GLenum status);

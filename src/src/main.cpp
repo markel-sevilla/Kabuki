@@ -49,7 +49,7 @@ int main()
          cam->update(pipeline->getWindow());
 
         // and here we call the rendere func
-        //pipeline->render(cam->);
+        pipeline->render(cam->getView(), cam->getProj());
     }
 //     {
 //         renderer->ProcessInput(window);

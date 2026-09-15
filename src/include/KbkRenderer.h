@@ -16,7 +16,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
-#include "KbkStage.h"
+#include "KbkPass.h"
 #include "KbkBuffer.h"
 #include "KbkShader.h"
 
@@ -53,7 +53,7 @@ namespace Graphics
         * @param[in] key: name of the buffer for retrieval
         * @return void 
         */
-        void subscribeBuffer(int width, int height, const std::string& key);
+        GLuint subscribeBuffer(int width, int height, const std::string& key);
         
         /**
         * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
@@ -62,9 +62,9 @@ namespace Graphics
         * @param[in] height: height of the window
         * @param[in] key: name of the buffer for retrieval
         * @param[in] attachments: pass the custom attachments themselves
-        * @return void 
+        * @return GLuint 
         */
-        void subscribeBuffer(int width, int height, const std::string& key, std::vector<KAttachment>& attachments);
+        GLuint subscribeBuffer(int width, int height, const std::string& key, std::vector<KAttachment>& attachments);
 
         /**
         * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
@@ -74,9 +74,9 @@ namespace Graphics
         * @param[in] key: name of the buffer for retrieval
         * @param[in] attachments: pass the custom attachments themselves
         * @param[in] size: number of attachments
-        * @return void 
+        * @return GLuint 
         */
-        void subscribeBuffer(int width, int height,  const std::string& key, KAttachment* attachment, int size);
+        GLuint subscribeBuffer(int width, int height,  const std::string& key, KAttachment* attachment, int size);
 
         /**
         * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
@@ -85,9 +85,9 @@ namespace Graphics
         * @param[in] height: height of the window
         * @param[in] key: name of the buffer for retrieval
         * @param[in] attachments: pass the custom attachments 
-        * @return void 
+        * @return GLuint 
         */
-        void subscribeBuffer(int width, int height,  const std::string& key, KAttachment& attachment);
+        GLuint subscribeBuffer(int width, int height,  const std::string& key, KAttachment& attachment);
 
         /**
         * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
@@ -96,9 +96,9 @@ namespace Graphics
         * @param[in] height: height of the window
         * @param[in] key: name of the buffer for retrieval
         * @param[in] attachments: pass the custom attachments themselves
-        * @return void 
+        * @return GLuint 
         */
-        void subscribeBuffer(int width, int height, const std::string& key, std::vector<GLAttachment>& attachments);
+        GLuint subscribeBuffer(int width, int height, const std::string& key, std::vector<GLAttachment>& attachments);
 
         /**
         * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
@@ -108,9 +108,9 @@ namespace Graphics
         * @param[in] key: name of the buffer for retrieval
         * @param[in] attachments: pass the custom attachments themselves
         * @param[in] size: number of attachments
-        * @return void 
+        * @return GLuint 
         */
-        void subscribeBuffer(int width, int height, const std::string& key, GLAttachment* attachments, int size);
+        GLuint subscribeBuffer(int width, int height, const std::string& key, GLAttachment* attachments, int size);
 
         /**
         * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
@@ -119,14 +119,14 @@ namespace Graphics
         * @param[in] height: height of the window
         * @param[in] key: name of the buffer for retrieval
         * @param[in] attachments: pass the custom attachments themselves
-        * @return void 
+        * @return GLuint 
         */
-        void subscribeBuffer(int width, int height, const std::string& key, GLAttachment attachment);
+        GLuint subscribeBuffer(int width, int height, const std::string& key, GLAttachment attachment);
 
         int width_, height_;
         std::unordered_map<std::string, std::unique_ptr<KShader>> shaders_; 
         std::unordered_map<std::string, std::unique_ptr<KBuffer>> buffers_; 
-        std::vector<std::unique_ptr<KStage>> stages_;
+        std::vector<std::unique_ptr<KPass>> stages_;
     };
 
     class KForwardRenderer : public KRenderer

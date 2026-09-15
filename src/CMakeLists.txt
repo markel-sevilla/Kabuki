@@ -11,7 +11,7 @@ add_executable(${PROJECT_NAME}
             include/KbkBuffer.h
             include/DebuggingInstance.h
             include/KbkPipeline.h
-            include/KbkStage.h
+            include/KbkPass.h
             include/Log.h
             include/KbkShader.h
             include/KbkRenderer.h
@@ -22,7 +22,7 @@ add_executable(${PROJECT_NAME}
             src/main.cpp
             src/Camera.cpp
             src/DebuggingInstance.cpp
-            src/KbkStage.cpp
+            src/KbkPass.cpp
             src/KbkShader.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC 

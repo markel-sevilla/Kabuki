@@ -9,7 +9,9 @@
  * @date    2026-07-25
  * @version 1.0
  */
-#pragma once
+#ifndef HH_KCAMERA
+#define HH_KCAMERA
+
 #include "glm/glm.hpp"
 
 struct GLFWwindow;
@@ -92,3 +94,5 @@ namespace Demo
         glm::vec2 mCursor;
 	};
 }
+
+#endif
