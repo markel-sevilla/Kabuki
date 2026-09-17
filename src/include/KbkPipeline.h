@@ -78,9 +78,18 @@ namespace Graphics
             return window_;
         }
 
+        /**
+        * @brief  it adds a mesh to the system   
+        * @return void 
+        */
         void addMesh(const Mesh* mesh);
 
+        /**
+        * @brief  it adds a collection of meshes to the system   
+        * @return void 
+        */
         void addMeshes(const std::vector<Mesh*>& mesh);
+        
         private:
 
         /**
