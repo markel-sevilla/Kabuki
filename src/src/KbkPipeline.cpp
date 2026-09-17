@@ -153,7 +153,7 @@ namespace Graphics
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // here we render with the renderer
-        renderer_->draw( view, proj );
+        renderer_->render( view, proj );
     }
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {

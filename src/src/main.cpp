@@ -17,6 +17,7 @@ int main()
     //init the camera
     auto cam = std::make_unique<Demo::Camera>(glm::radians(60.0), 1600.f, 900.f, 0.1f, 500.0f, glm::vec3(-90, 40, -20), glm::vec3(0,90,0));
 
+    
 
 
     //     renderer->ReloadShaders();

@@ -52,22 +52,25 @@
         return getLastPass();
     }
 
-    void KDeferredRenderer::draw(const glm::mat4& view, const glm::mat4& proj)
+    void KDeferredRenderer::render(const glm::mat4& view, const glm::mat4& proj)
+    {
+        //render all the passes from the renderer
+        for(auto& pass: passes_)
+            pass->execute(view, proj);
+
+    }
+
+    void KForwardRenderer::render(const glm::mat4& view, const glm::mat4& proj)
     {
 
     }
 
-    void KForwardRenderer::draw(const glm::mat4& view, const glm::mat4& proj)
+    void KInstancedRenderer::render(const glm::mat4& view, const glm::mat4& proj)
     {
 
     }
 
-    void KInstancedRenderer::draw(const glm::mat4& view, const glm::mat4& proj)
-    {
-
-    }
-
-    void KRayTraceRenderer::draw(const glm::mat4& view, const glm::mat4& proj)
+    void KRayTraceRenderer::render(const glm::mat4& view, const glm::mat4& proj)
     {
 
     }

@@ -21,13 +21,15 @@ namespace Graphics
 {
    
    //texture
-    struct KTexture
+    class KTexture
     {
+        public:
         KTexture() = default;
         ~KTexture();
         
         void generateTexture(unsigned int& id, unsigned char* data, unsigned width, unsigned height, unsigned channels, bool wrap);
        
+        private:
         unsigned int baseID_, 
                      normalID_,
                      metallicID_;
@@ -36,11 +38,13 @@ namespace Graphics
     
 
     //material for raytracing etc
-    struct KMaterial
+    class KMaterial
     {
+        public:
         KMaterial() = default;
         ~KMaterial() = default;
 
+        private:
         glm::vec4 color_;
         
         bool metallic_;

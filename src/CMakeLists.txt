@@ -14,6 +14,9 @@ add_executable(${PROJECT_NAME}
             include/KbkPass.h
             include/Log.h
             include/KbkShader.h
+            include/KbkTexture.h
+            include/KbkMesh.h
+            include/KbkVertex.h
             include/KbkRenderer.h
             include/Sink.h
             src/KbkBuffer.cpp
@@ -23,6 +26,9 @@ add_executable(${PROJECT_NAME}
             src/Camera.cpp
             src/DebuggingInstance.cpp
             src/KbkPass.cpp
+            src/KbkMesh.cpp
+            src/KbkTexture.cpp
+            src/KbkVertex.cpp
             src/KbkShader.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC 

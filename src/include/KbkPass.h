@@ -54,7 +54,7 @@ namespace Graphics
 
         KPass(KShader* shader);
 
-        virtual void execute() = 0;
+        virtual void execute(const glm::mat4& view, const glm::mat4& proj) = 0;
 
         void bindFrameBuffer(GLuint buffer) const;
 
@@ -164,7 +164,7 @@ namespace Graphics
         * @param[in] buffer: the buffer to bind
         * @return void 
         */
-        void execute() override;
+        void execute(const glm::mat4& view, const glm::mat4& proj) override;
 
     };
 }

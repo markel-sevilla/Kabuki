@@ -78,6 +78,8 @@ namespace Graphics
 			isFrameBufferComplete(status);
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		LOG_TRACE("KBuffer was succesfully created");
 	}
 	
     KBuffer::KBuffer(int width, int height, std::vector<KAttachment>& attachments)
@@ -142,6 +144,9 @@ namespace Graphics
 			isFrameBufferComplete(status);
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		LOG_TRACE("KBuffer was succesfully created");
+
     }
 
 	KBuffer::KBuffer(int width, int height, KAttachment* attachments, int size)
@@ -209,6 +214,9 @@ namespace Graphics
 
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		LOG_TRACE("KBuffer was succesfully created");
+
     }
 
     KBuffer::KBuffer(int width, int height, KAttachment& att)
@@ -243,6 +251,9 @@ namespace Graphics
 
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		LOG_TRACE("KBuffer was succesfully created");
+
 	}
 
 	void KBuffer::isFrameBufferComplete(GLenum status)

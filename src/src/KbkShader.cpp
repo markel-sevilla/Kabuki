@@ -122,6 +122,8 @@ namespace Graphics
         // after getting program just delete
         glDeleteShader(vertex);
         glDeleteShader(fragment);
+
+        LOG_TRACE("Shader bound to vertex " + std::string(vertexPath) + " and fragment " + std::string(fragmentPath) + " was succesfully created" );
     }
 
     // use my program

@@ -11,6 +11,7 @@
  */
 #include "KbkPass.h"
 #include "KbkShader.h"
+#include "Log.h"
 
 namespace Graphics
 {
@@ -34,11 +35,56 @@ namespace Graphics
 
     GPass::GPass( KShader* shader ) : KPass::KPass(shader)    
     {
+        LOG_TRACE("Geometry Pass was succesfully created");
     }
    
-    void GPass::execute()
+    void GPass::execute(const glm::mat4& view, const glm::mat4& proj)
     {
-        bindFrameBuffer(buffers_["GBuffer"]->getHandle());
+        auto buffer = buffers_["GBuffer"];
+        bindFrameBuffer(buffer->getHandle());
+
+        shader->Use();
+	
+	    for (auto& mesh : mMeshes)
+	    {
+	    	glBindVertexArray(mesh->mVAO);
+        
+	    	for (int i = 0; i < mesh->mM2Ws.size(); i++)
+	    	{
+            
+	    			shader->SetUniform("avgNormals", useAvgNormals);
+	    			//pass the matrices
+	    			shader->SetUniform("model", mesh->mM2Ws[i]);
+	    			shader->SetUniform("proj", cam->mProjection);
+	    			shader->SetUniform("view", cam->mView);
+	    			shader->SetUniform("viewMat", cam->mView);
+            
+	    			shader->SetUniform("maxTriangles", maxTriangles);
+            
+	    			if (mesh->mTex)
+	    			{
+	    				glActiveTexture(GL_TEXTURE0); // Diffuse
+	    				shader->SetUniform("baseTexture", 0);
+	    				glBindTexture(GL_TEXTURE_2D, mesh->mTex->mBaseID);
+                    
+	    				glActiveTexture(GL_TEXTURE1); // Normal map
+	    				shader->SetUniform("normalMap", 1);
+	    				glBindTexture(GL_TEXTURE_2D, mesh->mTex->mNormalID);
+                    
+	    				glActiveTexture(GL_TEXTURE2); //specular Texture
+	    				shader->SetUniform("specularTex", 2);
+	    				glBindTexture(GL_TEXTURE_2D, mesh->mTex->mMetallicID);
+	    			}
+                
+	    		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->mIndices.size()), GL_UNSIGNED_INT, (void*)0);
+	    	}
+        
+	    }
+    
+	    //go back to default
+	    glActiveTexture(GL_TEXTURE0);
+	    glBindVertexArray(0);
+	    glUseProgram(0);
     }
 
     void KPass::bindFrameBuffer(GLuint buffer) const

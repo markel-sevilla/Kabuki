@@ -78,6 +78,9 @@ namespace Graphics
             return window_;
         }
 
+        void addMesh(const Mesh* mesh);
+
+        void addMeshes(const std::vector<Mesh*>& mesh);
         private:
 
         /**
