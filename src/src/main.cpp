@@ -51,6 +51,12 @@ int main()
 
         // and here we call the rendere func
         pipeline->render(cam->getView(), cam->getProj());
+
+
+        glDisable(GL_BLEND);
+
+        glfwSwapBuffers(pipeline->getWindow());         
+        glfwPollEvents();
     }
 //     {
 //         renderer->ProcessInput(window);

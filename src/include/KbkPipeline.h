@@ -90,6 +90,30 @@ namespace Graphics
         */
         void addMeshes(const std::vector<KMesh*>& mesh);
 
+        /**
+        * @brief  it loads a scene froma json   
+        * @param[in]  scene: json   
+        * @return void 
+        */
+        void loadScene(const char* filename);
+
+        /**
+        * @brief  it loads a mesh from a gltf   
+        * @param[in]  m2w: model to world of the mesh   
+        * @param[in]  filename: gltf path   
+        * @return void 
+        */
+        void loadGltf(const glm::mat4& m2w, const std::string& filename);
+
+        /**
+        * @brief  it loads a collection of nodes from a gltf   
+        * @param[in]  m2w: model to world of the mesh   
+        * @param[in]  filename: gltf path   
+        * @param[in]  node: gltf node   
+        * @param[in]  model: gltf model   
+        * @return void 
+        */
+        void loadNodes(const glm::mat4& m2w ,tinygltf::Node& node, tinygltf::Model& model, const std::string & filepath);
         private:
 
         /**
