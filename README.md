@@ -22,9 +22,11 @@ Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main 
 ## Dependencies
 
 - OpenGL
+- Vulkan
 - GLFW
 - GLAD
 - GLM
+- stb
 
 ## Building
 // TODO
@@ -39,16 +41,36 @@ Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main 
 
 - [X] Window creation
 - [X] Debug logger
-- [X] Model loading
-- [X] Shader abstraction
-- [ ] Debug rendering features
+- [ ] Model loading
+- [X] KShader abstraction
+- [X] KMesh class
+- [X] KTexture Class
+- [X] KVertex Class
+- [X] KMaterial Class
+    - [ ] PBR materials
+- [X] KPipeline system:
+    -   [X] Specific KRender class to differentitate between rendering modes:
+        -   []  Deferred renderer
+        -   []  Fwd renderer
+        -   []  Inst renderer
+        -   []  RayT renderer
+    -   [X] KPass system
+    -   [X] KBuffer attachment
+    -   [X] KAttachment system
+    -    
+- [ ] Gltf Mesh/Scene loading
+- [ ] General lighting effects:
+    - [ ] Point Light 
+    - [ ] Dir Light
+    - [ ] Ambient Light
+    - [ ] Ambient Occ
+- [ ] Texture Mapping effects:
+    - [ ] Decals
+    - [ ] CubeMaps
+    - [ ] Normal mapping
 - [ ] Picking with KD-Trees and GJK
-- [ ] Mesh class
-- [ ] Deferred Renderer
-- [ ] PBR materials
-- [ ] Shadow mapping
 - [ ] Compute shaders
-- [ ] Documentation
+- [ ] Post-release documentation
 - [ ] Unit tests
 
 ## Contributing
@@ -56,6 +78,12 @@ Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main 
 Contributions are welcome!
 
 Feel free to open an issue or submit a pull request.
+
+## Next issue
+
+Create the scene loader so that we can start rendering scenes with meshes.
+Test the mesh laoding with the rendering part.
+There is a segmentation fault when destroying. Fix.
 
 ## License
 

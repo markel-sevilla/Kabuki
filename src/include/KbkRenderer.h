@@ -16,7 +16,7 @@
 #include <vector>
 #include <memory>
 #include "KbkPass.h"
-
+#include "KbkMesh.h"
 
 namespace Graphics
 {
@@ -56,9 +56,24 @@ namespace Graphics
         */
         KPass* getLastPass() const;
 
+         /**
+        * @brief  it adds a mesh to the system   
+        * @return void 
+        */
+        void addMesh( KMesh* mesh);
+
+        /**
+        * @brief  It gets the mesh vector
+        * @return mesh vector 
+        */
+        const std::vector<std::unique_ptr<KMesh>>& getMeshes() const;
+        
+
+
         protected:
         int width_, height_;
         std::vector<std::unique_ptr<KPass>> passes_;
+        std::vector<std::unique_ptr<KMesh>> meshes_;
     };
 
     class KForwardRenderer : public KRenderer

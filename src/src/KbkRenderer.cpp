@@ -47,9 +47,14 @@
 
     KPass* KRenderer::subscribePass(const char* vPath, const char* fPath, PassType type)
     {
-        passes_.push_back(KPass::createPass(vPath, fPath, type));
+        passes_.push_back(KPass::createPass(this, vPath, fPath, type));
 
         return getLastPass();
+    }
+
+    const std::vector<std::unique_ptr<KMesh>>& KRenderer::getMeshes() const
+    {
+        return meshes_;
     }
 
     void KDeferredRenderer::render(const glm::mat4& view, const glm::mat4& proj)
@@ -75,4 +80,8 @@
 
     }
 
+    void KRenderer::addMesh( KMesh* mesh)
+    {
+        meshes_.push_back(std::unique_ptr<KMesh>(mesh));
+    }
  }

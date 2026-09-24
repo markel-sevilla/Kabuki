@@ -10,6 +10,7 @@
  * @version 1.0
  */
 #include "KbkTexture.h"
+#include <stb/stb_image.h>
 
 namespace Graphics
 {
@@ -66,4 +67,16 @@ namespace Graphics
         stbi_image_free(data);
     }
 
+    unsigned KTexture::getBaseID() const
+    {
+        return baseID_;
+    }
+    unsigned KTexture::getNormalID() const
+    {
+        return normalID_;
+    }
+    unsigned KTexture::getMetallicID() const
+    {
+        return metallicID_;
+    }
 }

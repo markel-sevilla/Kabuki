@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include "KbkBuffer.h"
 #include "KbkShader.h"
+#include "KbkMesh.h"
 
 /*
  * @file    KPass.h
@@ -29,6 +30,7 @@ namespace Graphics
     };
 
     class KShader;
+    class KRenderer;
 
     class KPass
     {
@@ -39,7 +41,7 @@ namespace Graphics
         * @param[in] shader: shader that is going to be executed
         * @return void 
         */
-        static std::unique_ptr<KPass> createPass(const char* vPath, const char* fPath, PassType type);
+        static std::unique_ptr<KPass> createPass(KRenderer* renderer, const char* vPath, const char* fPath, PassType type);
         
 
         KPass() = default;
@@ -52,10 +54,23 @@ namespace Graphics
         * @return void 
         */
 
-        KPass(KShader* shader);
+        KPass(KRenderer* renderer, KShader* shader);
 
-        virtual void execute(const glm::mat4& view, const glm::mat4& proj) = 0;
 
+        /**
+        * @brief  It executes a certain pass   
+        * @param[in] view: view matrix
+        * @param[in] proj: projection matrix
+        * @return void 
+        */
+        virtual void execute(const glm::mat4& view, const glm::mat4& proj) const = 0;
+
+
+        /**
+        * @brief  It binds a framebuffer to draw   
+        * @param[in] buffer: the id of the buffer
+        * @return void 
+        */
         void bindFrameBuffer(GLuint buffer) const;
 
         
@@ -137,10 +152,20 @@ namespace Graphics
         */
         GLuint subscribeBuffer(int width, int height, const std::string& key, GLAttachment attachment);
 
+         /**
+        * @brief  It executes the pass  
+        * @return void 
+        */
+        const std::vector<std::unique_ptr<KMesh>>& getMeshes() const;
+
         protected:
         
         std::unordered_map<std::string, std::unique_ptr<KBuffer>> buffers_; 
         std::unique_ptr<KShader> shader_; 
+
+        //reference to the renderer 
+        KRenderer* owner_;
+
     };
 
     class GPass : public KPass
@@ -155,17 +180,18 @@ namespace Graphics
         /**
         * @brief  It loads the shader  
         * @param[in] shader: shader that is going to be executed
+        * @param[in] renderer: owner
         * @return void 
         */
-        GPass(KShader* shader);
+        GPass(KRenderer* renderer, KShader* shader);
 
-         /**
+        /**
         * @brief  It executes the pass  
-        * @param[in] buffer: the buffer to bind
+        * @param[in] proj: projection matrix
+        * @param[in] view: view matix 
         * @return void 
         */
-        void execute(const glm::mat4& view, const glm::mat4& proj) override;
-
+        void execute(const glm::mat4& view, const glm::mat4& proj) const override;
     };
 }
 

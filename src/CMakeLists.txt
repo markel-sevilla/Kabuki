@@ -28,7 +28,6 @@ add_executable(${PROJECT_NAME}
             src/KbkPass.cpp
             src/KbkMesh.cpp
             src/KbkTexture.cpp
-            src/KbkVertex.cpp
             src/KbkShader.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC 
@@ -53,4 +52,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC imgui::imgui)
 
+#stb image
+find_package(stb)
+target_link_libraries(${PROJECT_NAME} PUBLIC stb)
 

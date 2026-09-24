@@ -10,6 +10,7 @@
  * @version 1.0
  */
 #include "KbkPass.h"
+#include "KbkRenderer.h"
 #include "KbkShader.h"
 #include "Log.h"
 
@@ -17,66 +18,64 @@ namespace Graphics
 {
 
     
-    std::unique_ptr<KPass> KPass::createPass(const char* vPath, const char* fPath, PassType type)
+    std::unique_ptr<KPass> KPass::createPass(KRenderer* renderer, const char* vPath, const char* fPath, PassType type)
     {
         switch(type)
         {
             case PassType::GPass: // create the GPass with its shader
-                return std::unique_ptr<KPass>(static_cast<KPass*>(new GPass(new KShader(vPath, fPath))));
+                return std::unique_ptr<KPass>(static_cast<KPass*>(new GPass(renderer, new KShader(vPath, fPath))));
             
             default:
                 return nullptr;
         }
     }
 
-    KPass::KPass( KShader* shader ) : shader_(std::unique_ptr<KShader>(shader))
+    KPass::KPass( KRenderer* renderer, KShader* shader ) : owner_(renderer), shader_(std::unique_ptr<KShader>(shader))
     {
     }
 
-    GPass::GPass( KShader* shader ) : KPass::KPass(shader)    
+    GPass::GPass( KRenderer* renderer, KShader* shader ) : KPass::KPass(renderer, shader)    
     {
         LOG_TRACE("Geometry Pass was succesfully created");
     }
    
-    void GPass::execute(const glm::mat4& view, const glm::mat4& proj)
+    void GPass::execute(const glm::mat4& view, const glm::mat4& proj) const
     {
-        auto buffer = buffers_["GBuffer"];
+        auto& buffer = buffers_.at("GBuffer");
         bindFrameBuffer(buffer->getHandle());
 
-        shader->Use();
+        shader_->Use();
 	
-	    for (auto& mesh : mMeshes)
+	    for (auto& mesh : getMeshes())
 	    {
-	    	glBindVertexArray(mesh->mVAO);
+	    	glBindVertexArray(mesh->getVAO());
         
-	    	for (int i = 0; i < mesh->mM2Ws.size(); i++)
+	    	for (size_t i = 0; i < mesh->getM2Ws().size(); i++)
 	    	{
             
-	    			shader->SetUniform("avgNormals", useAvgNormals);
+	    			shader_->SetUniform("avgNormals", /*useAvgNormals*/false);
+
 	    			//pass the matrices
-	    			shader->SetUniform("model", mesh->mM2Ws[i]);
-	    			shader->SetUniform("proj", cam->mProjection);
-	    			shader->SetUniform("view", cam->mView);
-	    			shader->SetUniform("viewMat", cam->mView);
+	    			shader_->SetUniform("model", mesh->getM2Ws().at(i));
+	    			shader_->SetUniform("proj", proj);
+	    			shader_->SetUniform("view", view);
             
-	    			shader->SetUniform("maxTriangles", maxTriangles);
-            
-	    			if (mesh->mTex)
+	    			if (mesh->getTexture())
 	    			{
 	    				glActiveTexture(GL_TEXTURE0); // Diffuse
-	    				shader->SetUniform("baseTexture", 0);
-	    				glBindTexture(GL_TEXTURE_2D, mesh->mTex->mBaseID);
+	    				shader_->SetUniform("baseTexture", 0);
+	    				glBindTexture(GL_TEXTURE_2D, mesh->getTexture()->getBaseID());
                     
 	    				glActiveTexture(GL_TEXTURE1); // Normal map
-	    				shader->SetUniform("normalMap", 1);
-	    				glBindTexture(GL_TEXTURE_2D, mesh->mTex->mNormalID);
+	    				shader_->SetUniform("normalMap", 1);
+	    				glBindTexture(GL_TEXTURE_2D, mesh->getTexture()->getNormalID());
                     
 	    				glActiveTexture(GL_TEXTURE2); //specular Texture
-	    				shader->SetUniform("specularTex", 2);
-	    				glBindTexture(GL_TEXTURE_2D, mesh->mTex->mMetallicID);
+	    				shader_->SetUniform("specularTex", 2);
+	    				glBindTexture(GL_TEXTURE_2D, mesh->getTexture()->getMetallicID());
 	    			}
                 
-	    		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->mIndices.size()), GL_UNSIGNED_INT, (void*)0);
+	    		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->getIndices().size()), GL_UNSIGNED_INT, (void*)0);
 	    	}
         
 	    }
@@ -160,5 +159,10 @@ namespace Graphics
         buffers_.insert_or_assign(key, std::make_unique<KBuffer>(width, height, attachments));
 
         return buffers_[key]->getHandle();
+    }
+
+    const std::vector<std::unique_ptr<KMesh>>& KPass::getMeshes() const
+    {
+        return owner_->getMeshes();
     }
 }

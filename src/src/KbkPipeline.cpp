@@ -223,4 +223,15 @@ namespace Graphics
     {
 
     }
+
+    void KPipeline::addMesh( KMesh* mesh)
+    {
+        renderer_->addMesh(mesh);
+    }
+
+    void KPipeline::addMeshes(const std::vector<KMesh*>& meshes)
+    {
+        for(auto& mesh: meshes)
+            renderer_->addMesh(mesh);
+    }
 }

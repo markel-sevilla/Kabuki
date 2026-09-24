@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <glad/glad.h>
+#include <glm/vec4.hpp>
 
 
 /*
@@ -27,8 +28,22 @@ namespace Graphics
         KTexture() = default;
         ~KTexture();
         
+        /* 
+        * @brief: it generates the texture with the stbi library
+        * @param[in]: id - id for the txture
+        * @param[in]: data - pixels
+        * @param[in]: width - size of tex
+        * @param[in]: height - size of tex
+        * @param[in]: channels - rgba
+        * @param[in]: wrap - is it wrapped?
+        * @return: void  
+        */
         void generateTexture(unsigned int& id, unsigned char* data, unsigned width, unsigned height, unsigned channels, bool wrap);
        
+        unsigned getBaseID() const;
+        unsigned getNormalID() const;
+        unsigned getMetallicID() const;
+
         private:
         unsigned int baseID_, 
                      normalID_,

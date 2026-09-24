@@ -1,8 +1,11 @@
-#ifndef HH_KBKTEXT
-#define HH_KBKTEXT
+#ifndef HH_KBKVERT
+#define HH_KBKVERT
 
 #include <memory>
 #include <glad/glad.h>
+#include <glm/vec4.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 
 
 /*
@@ -20,32 +23,31 @@
 namespace Graphics
 {
    //vertex class
-    class Vertex {
+    class KVertex {
 
         public:
-        Vertex() = default;
+        KVertex() = default;
 
         //non default
-        Vertex(glm::vec4 pos,  glm::vec2 uv)
+        KVertex(glm::vec4 pos,  glm::vec2 uv)
         {
             for (int i = 0; i < 4; i++)
             {
-                mPosition[i] = pos[i];
+                position_[i] = pos[i];
             }
 
-            mUV[0] = uv[0];
-            mUV[1] = uv[1];
+            uv_[0] = uv[0];
+            uv_[1] = uv[1];
         }
 
-        private:
         //position, normal and texture coordinates of the vertex
-        glm::vec4 mPosition = glm::vec4{ 0,0,0,1 };
-        glm::vec3 mNormal = glm::vec3{ 0,0,0 };
-        glm::vec3 mTangent = glm::vec3{ 0,0,0 };
-        glm::vec3 mBiTan = glm::vec3{ 0,0,0 };
-        glm::vec2 mUV = glm::vec2{ 0,0};
-        glm::vec4 mColor = glm::vec4(0.5);
-        glm::vec3 mAvgNormal = glm::vec3{ 0 };
+        glm::vec4 position_ = glm::vec4{ 0,0,0,1 };
+        glm::vec3 normal_ = glm::vec3{ 0,0,0 };
+        glm::vec3 tangent_ = glm::vec3{ 0,0,0 };
+        glm::vec3 biTan_ = glm::vec3{ 0,0,0 };
+        glm::vec2 uv_ = glm::vec2{ 0,0};
+        glm::vec4 color_ = glm::vec4(0.5);
+        glm::vec3 avgNormal_ = glm::vec3{ 0 };
     };
 
 }
