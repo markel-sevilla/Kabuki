@@ -18,8 +18,12 @@
 #include <memory>
 
 #include "KbkPass.h"
+#include "KbkCamera.h"
 #include "KbkBuffer.h"
 #include "KbkRenderer.h"
+#include <stb_image.h>
+#include <gltf/tiny_gltf.h>
+#include <nlohmann/json.hpp>
 
 class GLFWwindow;
 class Camera;
@@ -57,7 +61,7 @@ namespace Graphics
         * @param[in] width: GLFW camera 
         * @return void 
         */
-        void render(const glm::mat4& view, const glm::mat4& proj );
+        void render(const glm::mat4& view = glm::mat4(1.0), const glm::mat4& proj = glm::mat4(1.0));
 
         /**
         * @brief  sets the clear color   
@@ -103,7 +107,7 @@ namespace Graphics
         * @param[in]  filename: gltf path   
         * @return void 
         */
-        void loadGltf(const glm::mat4& m2w, const std::string& filename);
+        void loadGltf(const glm::mat4& m2w, const std::string& filename, KMesh* lightmesh = nullptr);
 
         /**
         * @brief  it loads a collection of nodes from a gltf   
@@ -113,7 +117,36 @@ namespace Graphics
         * @param[in]  model: gltf model   
         * @return void 
         */
-        void loadNodes(const glm::mat4& m2w ,tinygltf::Node& node, tinygltf::Model& model, const std::string & filepath);
+        void loadNodes(const glm::mat4& m2w ,tinygltf::Node& node, tinygltf::Model& model, KMesh* lightmesh, const std::string & filepath);
+
+        /**
+        * @brief  it loads the camera inside the pipeline   
+        * @param[in]  scene: scene to load the cam   
+        * @return void 
+        */
+        std::unique_ptr<Graphics::KCamera> loadCamera(const nlohmann::json& scene);
+
+        /**
+        * @brief  it loads the meshes inside the pipeline   
+        * @param[in]  scene: scene to load the cam   
+        * @return void 
+        */
+        void loadMeshes(const nlohmann::json& scene);
+
+        /**
+        * @brief  it loads the lights inside the pipeline   
+        * @param[in]  scene: scene to load the cam   
+        * @return void 
+        */
+        void loadLights(const nlohmann::json& scene);
+
+        /**
+        * @brief  it loads the decals inside the pipeline   
+        * @param[in]  scene: scene to load the cam   
+        * @return void 
+        */
+        void loadDecals(const nlohmann::json& scene);
+
         private:
 
         /**

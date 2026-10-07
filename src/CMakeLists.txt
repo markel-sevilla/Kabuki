@@ -7,7 +7,7 @@ project(k-lib)
  #       )
  
 add_executable(${PROJECT_NAME}
-		    include/Camera.h
+		    include/KbkCamera.h
             include/KbkBuffer.h
             include/DebuggingInstance.h
             include/KbkPipeline.h
@@ -15,6 +15,7 @@ add_executable(${PROJECT_NAME}
             include/Log.h
             include/KbkShader.h
             include/KbkTexture.h
+            include/KbkLight.h
             include/KbkMesh.h
             include/KbkVertex.h
             include/KbkRenderer.h
@@ -23,11 +24,12 @@ add_executable(${PROJECT_NAME}
             src/KbkPipeline.cpp
             src/KbkRenderer.cpp
             src/main.cpp
-            src/Camera.cpp
+            src/KbkCamera.cpp
             src/DebuggingInstance.cpp
             src/KbkPass.cpp
             src/KbkMesh.cpp
             src/KbkTexture.cpp
+            src/KbkLight.cpp
             src/KbkShader.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC 
@@ -52,7 +54,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC imgui::imgui)
 
-#stb image
-find_package(stb)
-target_link_libraries(${PROJECT_NAME} PUBLIC stb)
-
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/external/stb
+)

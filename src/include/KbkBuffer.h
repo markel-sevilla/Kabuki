@@ -32,15 +32,27 @@ namespace Graphics
         GLenum internalFormat_;
         GLenum format_;
         GLenum type_;
-        GLenum attachmentPoint_; // se resuelve luego según índice de color si aplica
+        GLenum attachmentPoint_; 
 
         bool clamped;
     };
 
     enum class GLAttachmentStorage
     {
-        Texture,        // sampleable después
-        Renderbuffer    // write-only, más rápido, no sampleable
+        Texture,        // sampleable later
+        Renderbuffer    // write-only, no sampleable
+    };
+
+    // TODO; Think about a way of freely accesing each attachment without having to know the ecxact position in the buffer
+    // Ideas : an enum class ? But what if a buffer uses less attachments and still want to use one that goes out of b?
+    // put the attachments in a map instead of a vector and acces through a static key
+    // create an enum class to use 
+    enum class GLAttachmentKey 
+    {
+        PositionAtt = 0u,
+        NormalAtt,
+        DiffuseAtt,
+        DepthAtt
     };
 
     class KAttachment
@@ -101,12 +113,21 @@ namespace Graphics
         */
         GLuint getHandle() { return handle_; }
 
+        /**
+        * @brief  It retrieves the handle to the attachment  
+        * @return handle  
+        */
+        GLuint getAttachmentHandle(unsigned i) {  return attachments_[i].getHandle(); }
+        
         private:
-
+        
+        std::vector<KAttachment> attachments_;
         void isFrameBufferComplete(GLenum status);
         GLuint handle_;
         uint32_t width_, height;
         GLAttachmentStorage storage_;
-        std::vector<KAttachment> attachments_;
+        
+        //TODO : change this to a map so that 
+        // we can use custom keys to retrieve each texture without knowing the pos in  the biffer
     };
 }

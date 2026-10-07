@@ -1,8 +1,8 @@
 /**
- * @file    Camera.h
- * @brief   Simple Camera Class that gives basic notion in demos 
+ * @file    KCamera.h
+ * @brief   Simple KCamera Class that gives basic notion in demos 
  *
- * @details  Its a simple Camera class that gives a bit of freedom when testing your demos
+ * @details  Its a simple KCamera class that gives a bit of freedom when testing your demos
  *          
  *
  * @author  Markel Sevilla
@@ -16,13 +16,13 @@
 
 struct GLFWwindow;
 
-namespace Demo
+namespace Graphics
 {
-	struct Camera
+	struct KCamera
 	{
 
        /**
-        * @brief  Construct the Camera itself
+        * @brief  Construct the KCamera itself
         * @param[in] Fovy field of view
         * @param[in] Width width of the frustum
         * @param[in] Height heigt of the frustum
@@ -34,12 +34,12 @@ namespace Demo
         * @return none
         */
         
-       Camera(float Fovy, float Width, float Height,
+       KCamera(float Fovy, float Width, float Height,
            float Near, float Far,
            glm::vec3 Position, glm::vec3 Rotate);
 
         
-       ~Camera();
+       ~KCamera();
        
         /**
         * @brief  Updates the matrices of the cameras 
@@ -68,6 +68,13 @@ namespace Demo
         const glm::mat4& getView(){
             return mView;
         };
+
+         /**
+        * @brief  It accesses the projection matrix  
+        */
+        const glm::vec3& getPos() { 
+            return mCamPos; 
+        }
 
     private :
         // camera matrices

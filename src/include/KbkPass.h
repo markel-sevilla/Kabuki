@@ -6,6 +6,7 @@
 #include "KbkBuffer.h"
 #include "KbkShader.h"
 #include "KbkMesh.h"
+#include "KbkLight.h"
 
 /*
  * @file    KPass.h
@@ -25,7 +26,9 @@ namespace Graphics
     enum class PassType
     {
         GPass,
-        ShadowPass,
+        LightingPass,
+        AmbientPass,
+        DisplayPass,
         Total
     };
 
@@ -71,96 +74,47 @@ namespace Graphics
         * @param[in] buffer: the id of the buffer
         * @return void 
         */
-        void bindFrameBuffer(GLuint buffer) const;
+        void bindFrameBuffer(GLuint buffer, bool clear) const;
 
-        
         /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-        *         This variance creates an HDR color buffer (standard texture)
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
+        * @brief  It copies a framebuffer to another   
+        * @param[in] src: the origin fb
+        * @param[in] dst: the destination fb
+        * @param[in] copy: do we copy?
         * @return void 
         */
-        GLuint subscribeBuffer(int width, int height, const std::string& key);
+        void blitBuffers(const unsigned int src, const unsigned int dst, bool copy) const;
+
         
         /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-        This variance creates a buffer with various textures
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @return GLuint 
+        * @brief  It renders the window as a quad   
+        * @return void 
         */
-        GLuint subscribeBuffer(int width, int height, const std::string& key, std::vector<KAttachment>& attachments);
-        
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-        This variance creates a buffer with various textures explicitly created through the structs
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @param[in] size: number of attachments
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height,  const std::string& key, KAttachment* attachment, int size);
-        
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with a single customized attachment
-                  * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments 
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height,  const std::string& key, KAttachment& attachment);
+        void renderQuad() const;
 
         /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with various textures implicitly created
-                  * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @return GLuint 
+        * @brief  It binds a framebuffer to draw   
+        * @param[in] key: the string as key
+        * @param[in] buffer: the ptr to the buffer
+        * @return void 
         */
-        GLuint subscribeBuffer(int width, int height, const std::string& key, std::vector<GLAttachment>& attachments);
-        
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                 This variance creates a buffer with various textures implicitly created
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @param[in] size: number of attachments
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height, const std::string& key, GLAttachment* attachments, int size);
-        
-        /**
-        * @brief  Subscribes teh buffer to the pipeline and retrieves the handle of the buffer.
-                  This variance creates a buffer with a single texture created implicitly
-        * @param[in] width: width of the window
-        * @param[in] height: height of the window
-        * @param[in] key: name of the buffer for retrieval
-        * @param[in] attachments: pass the custom attachments themselves
-        * @return GLuint 
-        */
-        GLuint subscribeBuffer(int width, int height, const std::string& key, GLAttachment attachment);
+        void attachBuffer(const std::string& key, KBuffer* buffer);
 
          /**
-        * @brief  It executes the pass  
+        * @brief  It returns the meshes  
         * @return void 
         */
         const std::vector<std::unique_ptr<KMesh>>& getMeshes() const;
 
+        /**
+        * @brief  It returns the lights  
+        * @return void 
+        */
+        const std::vector<std::unique_ptr<KLight>>& getLights() const;
+
         protected:
         
-        std::unordered_map<std::string, std::unique_ptr<KBuffer>> buffers_; 
+        std::unordered_map<std::string, KBuffer* > buffers_; // references to the buffers stored in the renderer 
         std::unique_ptr<KShader> shader_; 
 
         //reference to the renderer 
@@ -184,6 +138,84 @@ namespace Graphics
         * @return void 
         */
         GPass(KRenderer* renderer, KShader* shader);
+
+        /**
+        * @brief  It executes the pass  
+        * @param[in] proj: projection matrix
+        * @param[in] view: view matix 
+        * @return void 
+        */
+        void execute(const glm::mat4& view, const glm::mat4& proj) const override;
+    };
+
+    class AmbientPass : public KPass
+    {
+
+        public:
+        
+        AmbientPass() = delete;
+        AmbientPass(const AmbientPass& pass) = delete;
+        void operator=(const AmbientPass& pass) = delete;
+
+        /**
+        * @brief  It loads the shader  
+        * @param[in] shader: shader that is going to be executed
+        * @param[in] renderer: owner
+        * @return void 
+        */
+        AmbientPass(KRenderer* renderer, KShader* shader);
+
+        /**
+        * @brief  It executes the pass  
+        * @param[in] proj: projection matrix
+        * @param[in] view: view matix 
+        * @return void 
+        */
+        void execute(const glm::mat4& view, const glm::mat4& proj) const override;
+    };
+
+    class LightingPass : public KPass
+    {
+
+        public:
+        
+        LightingPass() = delete;
+        LightingPass(const LightingPass& pass) = delete;
+        void operator=(const LightingPass& pass) = delete;
+
+        /**
+        * @brief  It loads the shader  
+        * @param[in] shader: shader that is going to be executed
+        * @param[in] renderer: owner
+        * @return void 
+        */
+        LightingPass(KRenderer* renderer, KShader* shader);
+
+        /**
+        * @brief  It executes the pass  
+        * @param[in] proj: projection matrix
+        * @param[in] view: view matix 
+        * @return void 
+        */
+        void execute(const glm::mat4& view, const glm::mat4& proj) const override;
+    };
+
+    class DisplayPass : public KPass
+    {
+
+        public:
+        
+        DisplayPass() = delete;
+        DisplayPass(const DisplayPass& pass) = delete;
+        void operator=(const DisplayPass& pass) = delete;
+
+        /**
+        * @brief  It loads the shader  
+        * @param[in] shader: shader that is going to be executed
+        * @param[in] renderer: owner
+        * @return void 
+        */
+        DisplayPass(KRenderer* renderer, KShader* shader);
 
         /**
         * @brief  It executes the pass  

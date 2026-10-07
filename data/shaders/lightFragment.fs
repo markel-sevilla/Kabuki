@@ -3,7 +3,7 @@ uniform sampler2D posTex;
 uniform sampler2D normalTex; 
 uniform sampler2D diffuseTex; 
 
-layout (location = 0) out vec4 pixelSemiFinalImage; 
+layout (location = 0) out vec4 FragColor; // pixelSemiFinalImage for later 
 
 struct Light
 {
@@ -74,5 +74,5 @@ vec3 phongLighting()
 
 void main() 
 { 
-	pixelSemiFinalImage = vec4(phongLighting(), 1);
+	FragColor = vec4(phongLighting(), 1);
 }

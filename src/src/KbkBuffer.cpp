@@ -79,6 +79,8 @@ namespace Graphics
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+		attachments_.push_back(att);
+
 		LOG_TRACE("KBuffer was succesfully created");
 	}
 	
@@ -87,17 +89,18 @@ namespace Graphics
         glGenFramebuffers(1, &handle_);
 	    glBindFramebuffer(GL_FRAMEBUFFER , handle_);
         
-		KAttachment depth; 
+		int depth; 
 
 		int i = 0;
 		std::vector<GLuint> attachmentsToDraw;
+		
 		
         for(auto& att : attachments)
         {
 			// depth case is handled later 
 			if(att.getFormat().format_ == GL_DEPTH_COMPONENT)
 			{
-				depth = att;
+				depth = i;
 				continue;
 			}
 
@@ -125,17 +128,17 @@ namespace Graphics
     	glDrawBuffers(attachmentsToDraw.size(), &attachmentsToDraw[0]);
 
     	// Create and attach depth buffer 
-		if(depth.getFormat().attachmentPoint_ == GL_DEPTH_ATTACHMENT)
+		if(attachments[depth].getFormat().attachmentPoint_ == GL_DEPTH_ATTACHMENT)
 		{
-			glGenTextures(1, &depth.getHandle());
-			glBindTexture(GL_TEXTURE_2D, depth.getHandle());
+			glGenTextures(1, &attachments[depth].getHandle());
+			glBindTexture(GL_TEXTURE_2D, attachments[depth].getHandle());
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 			
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth.getHandle(), 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, attachments[depth].getHandle(), 0);
 		}
 		
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -144,6 +147,8 @@ namespace Graphics
 			isFrameBufferComplete(status);
 
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		attachments_ = attachments;
 
 		LOG_TRACE("KBuffer was succesfully created");
 
@@ -187,6 +192,8 @@ namespace Graphics
 
 			// push back the attachments to later draw them
 			attachmentsToDraw.push_back(GL_COLOR_ATTACHMENT0 + i);
+			
+			attachments_.push_back(att);
         }
 		
     	// Tell OpenGL which color attachments we�ll use (of this framebuffer) for rendering
@@ -204,6 +211,8 @@ namespace Graphics
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 			
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth.getHandle(), 0);
+
+			attachments_.push_back(depth);
 		}
 		
 
@@ -250,6 +259,7 @@ namespace Graphics
 			isFrameBufferComplete(status);
 
 
+		attachments_.push_back(att);
     	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		LOG_TRACE("KBuffer was succesfully created");

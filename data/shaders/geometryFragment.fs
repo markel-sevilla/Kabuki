@@ -12,8 +12,8 @@ layout (location = 8) in vec3 avgNorm;
 layout (location = 0) out vec4 gPosition;
 layout (location = 1) out vec4 gNormal;
 layout (location = 2) out vec4 gDiffuse;
-layout (location = 3) out vec4 gTriangles;
-layout (location = 4) out vec4 gCurvature;
+// layout (location = 3) out vec4 gTriangles;
+// layout (location = 4) out vec4 gCurvature;
 
 
 uniform sampler2D baseTexture;
@@ -40,6 +40,6 @@ void main()
 	   gNormal = vec4(avgNormal, clamp(specular.g, 0, 1) * 20 + 5);
 
 	gDiffuse = vec4(diffuse,  specular.b); 
-	gTriangles = vec4( float(index) / float(maxTriangles) );
-	gCurvature = curv * 0.5 + 0.5;
+	// gTriangles = vec4( float(index) / float(maxTriangles) );
+	// gCurvature = curv * 0.5 + 0.5;
 }

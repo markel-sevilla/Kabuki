@@ -1,8 +1,8 @@
 /**
- * @file    Camera.cpp
- * @brief   Simple Camera Class that gives basic notion in demos 
+ * @file    KCamera.cpp
+ * @brief   Simple KCamera Class that gives basic notion in demos 
  *
- * @details  Its a simple Camera class that gives a bit of freedom when testing your demos
+ * @details  Its a simple KCamera class that gives a bit of freedom when testing your demos
  *          
  *
  * @author  Markel Sevilla
@@ -10,7 +10,7 @@
  * @version 1.0
  */
 #define GLM_ENABLE_EXPERIMENTAL
-#include "Camera.h"
+#include "KbkCamera.h"
 #include <glm/gtx/transform.hpp>
 #include "glfw/glfw3.h"
 #include "Log.h"
@@ -19,10 +19,10 @@
 #define STEP 5.F
 
 // TODO : need to change identation for camera members from mCam to cam_
-namespace Demo
+namespace Graphics
 {
  
-    Camera::Camera(float Fovy, float Width, float Height,
+    KCamera::KCamera(float Fovy, float Width, float Height,
         float Near, float Far,
         glm::vec3 Position, glm::vec3 Rotate )
     {
@@ -66,15 +66,15 @@ namespace Demo
 
         mCursor = glm::vec2(0);
 
-        LOG_TRACE("Camera was created succesfully");
+        LOG_TRACE("KCamera was created succesfully");
     }
 
-    Camera::~Camera()
+    KCamera::~KCamera()
     {
-        LOG_TRACE("Camera was succesfully deleted!");
+        LOG_TRACE("KCamera was succesfully deleted!");
     }
     
-    void Camera::update(GLFWwindow* window)
+    void KCamera::update(GLFWwindow* window)
     {
         getInput(window);
 
@@ -85,7 +85,7 @@ namespace Demo
         mView = glm::lookAt(mCamPos, mCamTarget, mCamUp);
     }
 
-    void Camera::getInput(GLFWwindow* window)
+    void KCamera::getInput(GLFWwindow* window)
     {
         // It gets the cursor and fetchges its position at this poiunt of the frame
         double cursor_x = 0;

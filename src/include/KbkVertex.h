@@ -22,6 +22,19 @@
 
 namespace Graphics
 {
+
+    enum class VertexProps 
+    {
+        Pos,
+        Normal,
+        Tangent,
+        Bitan,
+        UV,
+        Color,
+        AvgNormal, 
+        Total
+    };
+
    //vertex class
     class KVertex {
 

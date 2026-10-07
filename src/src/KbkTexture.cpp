@@ -10,7 +10,9 @@
  * @version 1.0
  */
 #include "KbkTexture.h"
-#include <stb/stb_image.h>
+#include <stb_image.h>
+#include <iostream>
+#include "Log.h"
 
 namespace Graphics
 {
@@ -24,11 +26,31 @@ namespace Graphics
 
     }
 
-    void KTexture::generateTexture(unsigned int& id, unsigned char* data, unsigned width, unsigned height, unsigned channels, bool wrap)
+    void KTexture::generateTexture(MatType type, unsigned char* data, unsigned width, unsigned height, unsigned channels, bool wrap)
     {
 
-        glGenTextures(1, &id);
-        glBindTexture(GL_TEXTURE_2D, id);
+        unsigned *id = nullptr;
+
+        switch (type)
+        {
+            case MatType::NORMAL:
+                LOG_TRACE("Normal texture");
+                id = &normalID_;
+                break;
+            
+            case MatType::METALLIC:
+                LOG_TRACE("Specular texture");
+                id = &metallicID_;
+                break;
+
+            case MatType::BASE:
+                LOG_TRACE("Base texture");
+                id = &baseID_;
+                break;
+        }
+
+        glGenTextures(1, id);
+        glBindTexture(GL_TEXTURE_2D, *id);
 
         if (!wrap)
         {
@@ -78,5 +100,64 @@ namespace Graphics
     unsigned KTexture::getMetallicID() const
     {
         return metallicID_;
+    }
+
+    void KMaterial::setColor(const glm::vec4& color)
+    {
+        color_ = color;
+    }
+
+
+    void KMaterial::setMetallic(bool metallic)
+    {
+        metallic_ = metallic;
+    }
+
+
+    void KMaterial::setShininess(float shininess)
+    {
+        shininess_ = shininess;
+    }
+
+
+    void KMaterial::setSpecular(float specular)
+    {
+        specular_ = specular;
+    }
+
+
+    void KMaterial::setRoughness(float roughness)
+    {
+        roughness_ = roughness;
+    }
+
+
+    const glm::vec4& KMaterial::getColor() const
+    {
+        return color_;
+    }
+
+
+    bool KMaterial::getMetallic() const
+    {
+        return metallic_;
+    }
+
+
+    float KMaterial::getShininess() const
+    {
+        return shininess_;
+    }
+
+
+    float KMaterial::getSpecular() const
+    {
+        return specular_;
+    }
+
+
+    float KMaterial::getRoughness() const
+    {
+        return roughness_;
     }
 }
