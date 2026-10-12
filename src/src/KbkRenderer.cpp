@@ -91,15 +91,6 @@
 
 	}
 
-    KCamera* KRenderer::getCam() const
-    {
-        return cam_.get();
-    }
-
-    void KRenderer::setCam(std::unique_ptr<Graphics::KCamera> cam)
-    {
-        cam_ = std::move(cam);
-    }
 
     KPass* KRenderer::getLastPass() const 
     {
@@ -199,8 +190,6 @@
     //TODO: make the renders constant
     void KDeferredRenderer::render(const glm::mat4& view, const glm::mat4& proj)
     {
-        cam_->update();
-        
         //render all the passes from the renderer
         for(int i = 0; i < passes_.size(); i++)
         {

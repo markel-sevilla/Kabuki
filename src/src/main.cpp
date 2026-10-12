@@ -14,17 +14,18 @@ int main()
     //init the pipeline
     auto pipeline = Graphics::KPipeline::kCreatePipelineGL(1600, 900, Graphics::KRenderType::DEF, true, true);
     
-    pipeline->loadScene("data/scenes/scene.json");
+    pipeline->loadObjects("data/scenes/scene.json");
+
+    auto camera = Graphics::KCamera::loadCamera("data/scenes/scene.json");
 
     while (!glfwWindowShouldClose(pipeline->getWindow()))
     {
         glfwSwapBuffers(pipeline->getWindow());
         glfwPollEvents();
 
-        //if we have an external camera to the pipeline for whatever reason
-        //we can paste the matrices so it uses thpse
-        
-        pipeline->render();
+        camera->update(pipeline->getWindow());
+
+        pipeline->render(camera->getView(), camera->getProj());
 
 
         glDisable(GL_BLEND);

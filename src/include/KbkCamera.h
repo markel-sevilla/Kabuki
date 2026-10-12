@@ -13,6 +13,7 @@
 #define HH_KCAMERA
 
 #include "glm/glm.hpp"
+#include <memory>
 
 struct GLFWwindow;
 
@@ -47,6 +48,13 @@ namespace Graphics
         * @return void 
         */
         void update(GLFWwindow* window);
+
+        /**
+        * @brief  it loads the camera inside the pipeline   
+        * @param[in]  scene: scene to load the cam   
+        * @return void 
+        */
+        static std::unique_ptr<Graphics::KCamera> loadCamera(const char* filename);
 
         /**
         * @brief  It polls the input from the glfw window  
@@ -92,7 +100,7 @@ namespace Graphics
         float alpha;
         float beta;
         float radius;
-
+        float yaw_, pitch_;
 
         glm::vec3 mCamPos;
         glm::vec3 mCamTarget;

@@ -86,10 +86,12 @@ namespace Graphics
 	
     KBuffer::KBuffer(int width, int height, std::vector<KAttachment>& attachments)
     {
+		if(attachments.empty()) return;
+
         glGenFramebuffers(1, &handle_);
-	    glBindFramebuffer(GL_FRAMEBUFFER , handle_);
+	    glBindFramebuffer(GL_FRAMEBUFFER, handle_);
         
-		int depth; 
+		int depth = -1; 
 
 		int i = 0;
 		std::vector<GLuint> attachmentsToDraw;
@@ -128,7 +130,7 @@ namespace Graphics
     	glDrawBuffers(attachmentsToDraw.size(), &attachmentsToDraw[0]);
 
     	// Create and attach depth buffer 
-		if(attachments[depth].getFormat().attachmentPoint_ == GL_DEPTH_ATTACHMENT)
+		if(depth != -1 && attachments[depth].getFormat().attachmentPoint_ == GL_DEPTH_ATTACHMENT)
 		{
 			glGenTextures(1, &attachments[depth].getHandle());
 			glBindTexture(GL_TEXTURE_2D, attachments[depth].getHandle());
@@ -156,6 +158,8 @@ namespace Graphics
 
 	KBuffer::KBuffer(int width, int height, KAttachment* attachments, int size)
     {
+		if(size <= 0) return;
+		
         glGenFramebuffers(1, &handle_);
 	    glBindFramebuffer(GL_FRAMEBUFFER , handle_);
         
@@ -165,7 +169,7 @@ namespace Graphics
 		
         for(int i = 0; i < size; i++)
         {
-			KAttachment att = attachments[i];
+			KAttachment& att = attachments[i];
 
 			// depth case is handled later 
 			if(att.getFormat().attachmentPoint_ == GL_DEPTH_ATTACHMENT)

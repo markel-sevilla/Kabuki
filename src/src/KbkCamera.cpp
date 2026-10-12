@@ -12,6 +12,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "KbkCamera.h"
 #include <glm/gtx/transform.hpp>
+#include <nlohmann/json.hpp>
+#include <fstream>
 #include "glfw/glfw3.h"
 #include "Log.h"
 
@@ -74,6 +76,62 @@ namespace Graphics
         LOG_TRACE("KCamera was succesfully deleted!");
     }
     
+    std::unique_ptr<Graphics::KCamera> KCamera::loadCamera(const char* filename)
+    {
+        nlohmann::json file(filename);
+		std::ifstream fp(filename);
+
+		//Read file to json
+		if (fp.is_open() && fp.good())
+		{
+			fp >> std::setw(4) >> file;
+			LOG_TRACE("Camera file succesfully opened");
+			fp.close();
+		}
+        else
+			return nullptr;
+
+
+        //we find a camaera
+		if (file.find("camera") != file.end())
+		{
+			glm::vec3 translate, rotate, size;
+
+			//read the traanslate rotate OR the whole matrx
+			if (file["camera"].find("translate") != file["camera"].end())
+			{
+				translate.x = file["camera"]["translate"]["x"];
+				translate.y = file["camera"]["translate"]["y"];
+				translate.z = file["camera"]["translate"]["z"];
+			}
+
+			if (file["camera"].find("rotate") != file["camera"].end())
+			{
+				rotate.x = file["camera"]["rotate"]["x"];
+				rotate.y = file["camera"]["rotate"]["y"];
+				rotate.z = file["camera"]["rotate"]["z"];
+			}
+
+            if (file["camera"].find("size") != file["camera"].end())
+			{
+				size.x = file["camera"]["size"]["x"];
+				size.y = file["camera"]["size"]["y"];
+			}
+
+			//specifics of the camera 
+			float n = file["camera"]["near"];
+			float f = file["camera"]["far"];
+			float fovy = file["camera"]["FOVy"];
+
+			LOG_TRACE("Renderer's camera was succesfully created");
+			
+			//create my new camera
+			return std::unique_ptr<KCamera>(new KCamera(glm::radians(fovy), size.x, size.y, n, f, translate, rotate));
+		}
+
+        return nullptr;
+    }
+
     void KCamera::update(GLFWwindow* window)
     {
         getInput(window);
@@ -85,6 +143,7 @@ namespace Graphics
         mView = glm::lookAt(mCamPos, mCamTarget, mCamUp);
     }
 
+
     void KCamera::getInput(GLFWwindow* window)
     {
         // It gets the cursor and fetchges its position at this poiunt of the frame
@@ -94,6 +153,7 @@ namespace Graphics
 
         float dt = 0.016f;
         float speed = STEP;
+
         auto  side = glm::normalize(glm::cross(mCamFront, { 0, 1, 0 }));
 
         // if shift pressed then we double the speed

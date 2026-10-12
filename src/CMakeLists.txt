@@ -6,7 +6,7 @@ project(k-lib)
         
  #       )
  
-add_executable(${PROJECT_NAME}
+add_library(${PROJECT_NAME} STATIC 
 		    include/KbkCamera.h
             include/KbkBuffer.h
             include/DebuggingInstance.h
@@ -23,7 +23,6 @@ add_executable(${PROJECT_NAME}
             src/KbkBuffer.cpp
             src/KbkPipeline.cpp
             src/KbkRenderer.cpp
-            src/main.cpp
             src/KbkCamera.cpp
             src/DebuggingInstance.cpp
             src/KbkPass.cpp
@@ -37,6 +36,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     include        # relativo al CMakeLists.txt
     ${CMAKE_SOURCE_DIR}/include 
 )
+
+add_executable(Kabuki
+    src/main.cpp
+)
+
+target_link_libraries(Kabuki PRIVATE k-lib)
 
 # GLM
 find_package(glm CONFIG REQUIRED)

@@ -43,6 +43,8 @@
 build/
 Build/
 build-*/
+data/scenes/
+data/gltf/
 
 # CMake generated files
 CMakeFiles/

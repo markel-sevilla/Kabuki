@@ -175,17 +175,6 @@ namespace Graphics
         */
         const std::vector<std::unique_ptr<KLight>>& getLights() const;
 
-         /**
-        * @brief  It gets the cam of a renderer
-        */
-        KCamera* getCam() const;
-
-         /**
-        * @brief  It sets the cam of a renderer
-        * @param[in] cam:  camera to set
-        */
-        void setCam(std::unique_ptr<Graphics::KCamera> cam);
-
         /**
         * @brief  It generates the quad that we will use 
         */
@@ -199,7 +188,6 @@ namespace Graphics
         protected:
 
         int width_, height_;
-        std::unique_ptr<Graphics::KCamera> cam_;
         std::vector<std::unique_ptr<KBuffer>> buffers_;
         std::vector<std::unique_ptr<KPass>> passes_;
         std::vector<std::unique_ptr<KMesh>> meshes_;

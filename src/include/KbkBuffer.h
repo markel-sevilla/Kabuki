@@ -47,13 +47,13 @@ namespace Graphics
     // Ideas : an enum class ? But what if a buffer uses less attachments and still want to use one that goes out of b?
     // put the attachments in a map instead of a vector and acces through a static key
     // create an enum class to use 
-    enum class GLAttachmentKey 
-    {
-        PositionAtt = 0u,
-        NormalAtt,
-        DiffuseAtt,
-        DepthAtt
-    };
+    // enum class GLAttachmentKey 
+    // {
+    //     PositionAtt = 0u,
+    //     NormalAtt,
+    //     DiffuseAtt,
+    //     DepthAtt
+    // };
 
     class KAttachment
     {
@@ -68,12 +68,41 @@ namespace Graphics
           target_(target)
         {}
 
+         /**
+        * @brief  It gets the handle of the attachment
+        * @return GLuint
+        */
         GLuint& getHandle() { return handle_; }
+
+        /**
+        * @brief  It gets the format of the attachment
+        * @return GLFormatInfo
+        */
         GLFormatInfo& getFormat() { return format_; }
+
+        
+        /**
+        * @brief  It gets the target of the attachment
+        * @return GLTarget
+        */
         GLTarget& getTarget() { return target_; }
 
+        /**
+        * @brief  It gets the handle of the attachment
+        * @return GLuint
+        */
         GLuint getHandle() const { return handle_; }
+
+          /**
+        * @brief  It gets the format of the attachment
+        * @return GLFormatInfo
+        */
         GLFormatInfo getFormat() const { return format_; }
+
+        /**
+        * @brief  It gets the target of the attachment
+        * @return GLTarget
+        */
         GLTarget getTarget() const { return target_; }
        
         private:
@@ -119,6 +148,13 @@ namespace Graphics
         */
         GLuint getAttachmentHandle(unsigned i) {  return attachments_[i].getHandle(); }
         
+
+        /**
+        * @brief  It retrieves the attachments vector 
+        * @return handle  
+        */
+        const std::vector<KAttachment>& getAttachments() { return attachments_; }
+        
         private:
         
         std::vector<KAttachment> attachments_;
@@ -128,6 +164,6 @@ namespace Graphics
         GLAttachmentStorage storage_;
         
         //TODO : change this to a map so that 
-        // we can use custom keys to retrieve each texture without knowing the pos in  the biffer
+        // we can use custom keys to retrieve each texture without knowing the pos in  the buffer
     };
 }

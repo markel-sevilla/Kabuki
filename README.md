@@ -41,7 +41,7 @@ Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main 
 
 - [X] Window creation
 - [X] Debug logger
-- [ ] Model loading
+- [X] Model loading
 - [X] KShader abstraction
 - [X] KMesh class
 - [X] KTexture Class
@@ -57,10 +57,11 @@ Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main 
     -   [X] KPass system
     -   [X] KBuffer attachment
     -   [X] KAttachment system
-    -    
-- [ ] Gltf Mesh/Scene loading
+- [ ] Gltf Mesh/Scene loading:
+    -   [X] Basic loading
+    -   [ ] Add multithreading 
 - [ ] General lighting effects:
-    - [ ] Point Light 
+    - [X] Point Light 
     - [ ] Dir Light
     - [ ] Ambient Light
     - [ ] Ambient Occ
@@ -71,7 +72,10 @@ Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main 
 - [ ] Picking with KD-Trees and GJK
 - [ ] Compute shaders
 - [ ] Post-release documentation
-- [ ] Unit tests
+- [ ] Unit tests:
+    - [X]  Testing framework make pipeline
+    - [ ]  Basic testing for classes (Continuous task)
+    - [ ]
 
 ## Contributing
 
@@ -81,10 +85,7 @@ Feel free to open an issue or submit a pull request.
 
 ## Next issue
 
-I am loading the scene. Probably a good idea to load scenes from json. Now, do I want the pipeline to have cameras? If so, do I want it to have more than one? Does it make sense from a library point of view?
-Create the scene loader so that we can start rendering scenes with meshes.
-Test the mesh laoding with the rendering part.
-There is a segmentation fault when destroying. Fix.
+Testing framework
 
 ## License
 

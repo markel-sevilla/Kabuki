@@ -2,7 +2,7 @@ VCPKG-PATH=$(HOME)/vcpkg/scripts/buildsystems/vcpkg.cmake
 BUILD-TYPE=Debug
 
 SCENE-EXE=build/k-lib
-TEST-EXE=build/tests/k-lib-tests
+TEST-EXE=build/k-lib-tests
 
 
 .PHONY: build test check-warnings memcheck static-analysis clean
@@ -17,19 +17,18 @@ build: clean
 		-DCMAKE_BUILD_TYPE=$(BUILD-TYPE) \
 		-DCMAKE_TOOLCHAIN_FILE=$(VCPKG-PATH)
 
-	cmake --build ./build --target k-lib
+	cmake --build ./build --target Kabuki
 
 
 # --------------------------------------------------
 # Run tests
 # --------------------------------------------------
-
 test:
 	cmake -B build/ \
 		-DCMAKE_BUILD_TYPE=$(BUILD-TYPE) \
 		-DCMAKE_TOOLCHAIN_FILE=$(VCPKG-PATH)
 
-	cmake --build ./build --target test
+	cmake --build ./build --target k-lib-tests
 
 	ctest --test-dir build --output-on-failure
 

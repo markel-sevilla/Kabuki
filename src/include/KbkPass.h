@@ -112,6 +112,12 @@ namespace Graphics
         */
         const std::vector<std::unique_ptr<KLight>>& getLights() const;
 
+        /**
+         * @brief It gets the shader
+         */
+
+        unsigned getShaderID() const;
+
         protected:
         
         std::unordered_map<std::string, KBuffer* > buffers_; // references to the buffers stored in the renderer 

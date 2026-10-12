@@ -99,7 +99,7 @@ namespace Graphics
         * @param[in]  scene: json   
         * @return void 
         */
-        void loadScene(const char* filename);
+        void loadObjects(const char* filename);
 
         /**
         * @brief  it loads a mesh from a gltf   
@@ -119,12 +119,6 @@ namespace Graphics
         */
         void loadNodes(const glm::mat4& m2w ,tinygltf::Node& node, tinygltf::Model& model, KMesh* lightmesh, const std::string & filepath);
 
-        /**
-        * @brief  it loads the camera inside the pipeline   
-        * @param[in]  scene: scene to load the cam   
-        * @return void 
-        */
-        std::unique_ptr<Graphics::KCamera> loadCamera(const nlohmann::json& scene);
 
         /**
         * @brief  it loads the meshes inside the pipeline   

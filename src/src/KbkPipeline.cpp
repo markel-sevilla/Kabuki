@@ -159,24 +159,13 @@ namespace Graphics
     {
         clearColor_ = rgba;
     }
+
     void KPipeline::render(const glm::mat4& view, const glm::mat4& proj)
     {
         glClearColor(clearColor_.x, clearColor_.y, clearColor_.z, clearColor_.w); // keep it black so it doesn't leak into g-buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//TODO : change this to a vector of cameras or something similar as
-		// the idea is cool, but does not have any sense right now
-        if(renderer_->getCam())
-        {
-			renderer_->getCam()
-            //LOG_TRACE("You are using the rendrer's camera");
-            renderer_->render(renderer_->getCam()->getView(), renderer_->getCam()->getProj());
-        }
-        else
-        {
-            LOG_TRACE("You are using an external camera");
-            renderer_->render( view, proj );
-        }
+        renderer_->render( view, proj );
         // here we render with the renderer
     }
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -259,51 +248,7 @@ namespace Graphics
             renderer_->addMesh(mesh);
     }
 
-    std::unique_ptr<Graphics::KCamera> KPipeline::loadCamera(const nlohmann::json& file)
-    {
-        //we find a camaera
-		if (file.find("camera") != file.end())
-		{
-			glm::vec3 translate, rotate;
-
-			//read the traanslate rotate OR the whole matrx
-			if (file["camera"].find("translate") != file["camera"].end())
-			{
-				translate.x = file["camera"]["translate"]["x"];
-				translate.y = file["camera"]["translate"]["y"];
-				translate.z = file["camera"]["translate"]["z"];
-			}
-
-			if (file["camera"].find("rotate") != file["camera"].end())
-			{
-				rotate.x = file["camera"]["rotate"]["x"];
-				rotate.y = file["camera"]["rotate"]["y"];
-				rotate.z = file["camera"]["rotate"]["z"];
-			}
-
-			//specifics of the camera 
-			float n = file["camera"]["near"];
-			float f = file["camera"]["far"];
-			float fovy = file["camera"]["FOVy"];
-
-			glm::vec3 dir = glm::rotate(glm::mat4(1), glm::radians(rotate.x), glm::vec3(1, 0, 0)) *
-				glm::rotate(glm::mat4(1), glm::radians(rotate.y), glm::vec3(0, 1, 0)) *
-				glm::rotate(glm::mat4(1), glm::radians(rotate.z), glm::vec3(0, 0, 1)) * glm::vec4(0, 0, 1, 0);
-
-			glm::vec3 up = glm::rotate(glm::mat4(1), glm::radians(rotate.x), glm::vec3(1, 0, 0)) *
-				glm::rotate(glm::mat4(1), glm::radians(rotate.y), glm::vec3(0, 1, 0)) *
-				glm::rotate(glm::mat4(1), glm::radians(rotate.z), glm::vec3(0, 0, 1)) * glm::vec4(0, 1, 0, 0);
-
-			glm::vec3 target = translate + dir;
-
-			LOG_TRACE("Renderer's camera was succesfully created");
-			
-			//create my new camera
-			return std::unique_ptr<KCamera>(new KCamera(glm::radians(fovy), size_.x, size_.y, n, f, translate, target));
-		}
-
-        return nullptr;
-    }
+    
 
     void KPipeline::loadDecals(const nlohmann::json& file)
     {
@@ -490,7 +435,7 @@ namespace Graphics
 
 		// }
     }
-    void KPipeline::loadScene(const char* filename)
+    void KPipeline::loadObjects(const char* filename)
     {
         nlohmann::json file(filename);
 		std::ifstream fp(filename);
@@ -504,9 +449,9 @@ namespace Graphics
 		}else
 			return;
 
-		LOG_TRACE("Load Scene");
+		LOG_TRACE("Load Objects");
 
-		renderer_->setCam(loadCamera(file));
+		//renderer_->setCam(loadCamera(file));
 
         loadMeshes(file);
 

@@ -20,8 +20,6 @@
 
 namespace Graphics
 {
-
-    
     std::unique_ptr<KPass> KPass::createPass(KRenderer* renderer, const char* vPath, const char* fPath, PassType type)
     {
         switch(type)
@@ -143,7 +141,7 @@ namespace Graphics
 	    // }
     
 
-	    shader_->SetUniform("ambient", 0.5f);
+	    shader_->SetUniform("ambient", 0.25f);
 
 	    renderQuad();
 
@@ -221,8 +219,8 @@ namespace Graphics
 	    	// 	mLights[i]->motionAngle += 0.0016f;
 	    	// }
 
-	    	//set the uniform
-	    	shader_->SetUniform("viewPos", owner_->getCam()->getPos());
+	    	// we reconstruct the camera position from the view matrix
+	    	shader_->SetUniform("viewPos", glm::vec3(glm::inverse(view)[3]));
         
 	    	shader_->SetUniform("width", 1600.f);
 	    	shader_->SetUniform("height", 900.f);
@@ -322,4 +320,10 @@ namespace Graphics
     {
         return owner_->getLights();
     }
+
+    unsigned KPass::getShaderID() const
+	{
+		return shader_->ID;
+	}
+
 }
