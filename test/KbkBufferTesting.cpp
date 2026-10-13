@@ -11,14 +11,10 @@ protected:
     void SetUp() override
     {
         OpenGLTest::SetUp();
-
-        // Inicialización específica del buffer
     }
 
     void TearDown() override
     {
-        // Limpieza específica
-
         OpenGLTest::TearDown();
     }
 };
@@ -61,7 +57,6 @@ TEST_F(KbkBufferTest, Constructor3)
     for(int i = 0; i < 4; i++)
         ASSERT_EQ(buffer->getAttachmentHandle(i), att[i].getHandle());
 
-    // TODO
     EXPECT_EQ(buffer->getAttachments().size(), 4);
 
     delete buffer;
@@ -77,8 +72,31 @@ TEST_F(KbkBufferTest, Constructor4)
     for(int i = 0; i < 4; i++)
         ASSERT_EQ(buffer->getAttachmentHandle(i), att[i].getHandle());
 
-    // TODO
     EXPECT_EQ(buffer->getAttachments().size(), 4);
+
+    delete buffer;
+}
+
+
+TEST_F(KbkBufferTest, EmptyConstructor)
+{
+    KAttachment att[4];
+
+    auto buffer = new KBuffer(1600, 900, att, 0);
+
+    EXPECT_EQ(buffer->getAttachments().size(), 0);
+
+    delete buffer;
+}
+
+
+TEST_F(KbkBufferTest, EmptyConstructor2)
+{
+    std::vector<KAttachment> att;
+
+    auto buffer = new KBuffer(1600, 900, att);
+
+    EXPECT_EQ(buffer->getAttachments().size(), 0);
 
     delete buffer;
 }

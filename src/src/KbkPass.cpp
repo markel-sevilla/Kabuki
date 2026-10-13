@@ -45,6 +45,12 @@ namespace Graphics
     {
     }
 
+	KPass::~KPass()
+	{
+		buffers_.clear();
+		owner_ = nullptr;
+	}
+
 	void KPass::renderQuad() const
 	{
 		glBindVertexArray(owner_->getQuadHandle());
@@ -324,6 +330,14 @@ namespace Graphics
     unsigned KPass::getShaderID() const
 	{
 		return shader_->ID;
+	}
+
+    const KBuffer* KPass::getBuffer(const std::string& key) const 
+	{
+		if(buffers_.find(key) == buffers_.end())
+			return nullptr;
+
+		return buffers_.at(key);
 	}
 
 }

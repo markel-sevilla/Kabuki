@@ -156,6 +156,15 @@ namespace Graphics
 
     }
 
+	KBuffer::~KBuffer()
+	{
+		attachments_.clear();
+		
+		glDeleteBuffers(1, &handle_);
+
+		handle_ = 0;
+	}
+
 	KBuffer::KBuffer(int width, int height, KAttachment* attachments, int size)
     {
 		if(size <= 0) return;

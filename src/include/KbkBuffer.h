@@ -135,7 +135,11 @@ namespace Graphics
         KBuffer(int width, int height, KAttachment& attachment);
         KBuffer(int width, int height);
         
-
+        /**
+        * @brief  It retrieves the handle to the buffer  
+        */
+        ~KBuffer();
+        
         /**
         * @brief  It retrieves the handle to the buffer  
         * @return handle  

@@ -61,6 +61,11 @@ namespace Graphics
 
 
         /**
+        * @brief  It destroys the pass   
+        */
+        virtual ~KPass();
+
+        /**
         * @brief  It executes a certain pass   
         * @param[in] view: view matrix
         * @param[in] proj: projection matrix
@@ -118,6 +123,11 @@ namespace Graphics
 
         unsigned getShaderID() const;
 
+         /**
+         * @brief It gets the buffer of the pass
+         */
+        const KBuffer* getBuffer(const std::string& key) const ;
+        
         protected:
         
         std::unordered_map<std::string, KBuffer* > buffers_; // references to the buffers stored in the renderer 
@@ -138,7 +148,12 @@ namespace Graphics
         void operator=(const GPass& pass) = delete;
 
         /**
-        * @brief  It loads the shader  
+        * @brief  It destroys the pass  
+        */
+        ~GPass() override {}
+
+        /**
+        * @brief  It loads the pass 
         * @param[in] shader: shader that is going to be executed
         * @param[in] renderer: owner
         * @return void 
@@ -162,6 +177,11 @@ namespace Graphics
         AmbientPass() = delete;
         AmbientPass(const AmbientPass& pass) = delete;
         void operator=(const AmbientPass& pass) = delete;
+
+        /**
+        * @brief  It destroys the pass  
+        */
+        ~AmbientPass() override {}
 
         /**
         * @brief  It loads the shader  
@@ -190,6 +210,11 @@ namespace Graphics
         void operator=(const LightingPass& pass) = delete;
 
         /**
+        * @brief  It destroys the pass  
+        */
+        ~LightingPass() override {}
+
+        /**
         * @brief  It loads the shader  
         * @param[in] shader: shader that is going to be executed
         * @param[in] renderer: owner
@@ -214,6 +239,12 @@ namespace Graphics
         DisplayPass() = delete;
         DisplayPass(const DisplayPass& pass) = delete;
         void operator=(const DisplayPass& pass) = delete;
+
+
+        /**
+        * @brief  It destroys the pass  
+        */
+        ~DisplayPass() override {}
 
         /**
         * @brief  It loads the shader  

@@ -73,6 +73,6 @@ namespace Graphics
         * @return void 
         */
         
-        void LoadShader(const char* vertexPath, const char* fragmentPath);
+        bool LoadShader(const char* vertexPath, const char* fragmentPath);
     };
 }

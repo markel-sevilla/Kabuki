@@ -70,11 +70,41 @@ TEST_F(KbkPassTest, CreatePass)
 
 TEST_F(KbkPassTest, Attachments)
 {
+   using namespace Graphics;
+
+   auto renderer = std::make_unique<KDeferredRenderer>(1600, 900);
     // TODO
+   auto gPass = KPass::createPass(renderer.get(), "data/shaders/geometryVertex.vs", "data/shaders/geometryFragment.fs", PassType::GPass);
+
+   KAttachment att;
+   auto buffer = new KBuffer(1600, 900, att);
+
+   gPass->attachBuffer("Buffer", buffer);
+
+   ASSERT_EQ(gPass->getBuffer("Buffer"), buffer);
+
+   auto buffer2 = new KBuffer(1600, 900, att);
+
+   gPass->attachBuffer("Buffer2", buffer2);
+
+   EXPECT_EQ(gPass->getBuffer("Buffer2"), buffer2);
+
 }
 
-
-TEST_F(KbkPassTest, Execute)
+TEST_F(KbkPassTest, Destructor)
 {
+   using namespace Graphics;
+
+   auto renderer = std::make_unique<KDeferredRenderer>(1600, 900);
     // TODO
+   auto gPass = KPass::createPass(renderer.get(), "data/shaders/geometryVertex.vs", "data/shaders/geometryFragment.fs", PassType::GPass);
+
+   KAttachment att;
+   auto buffer = new KBuffer(1600, 900, att);
+
+   gPass->attachBuffer("Buffer", buffer);
+
+   gPass.reset();
+
+   EXPECT_EQ(gPass, nullptr);
 }

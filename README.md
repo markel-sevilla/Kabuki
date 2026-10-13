@@ -76,7 +76,7 @@ Kabuki is an OpenGL 3.0 based lightweight library written in C++20/23. The main 
     - [X]  Testing framework make pipeline
     - [ ]  Basic testing for classes (Continuous task)
     - [ ]
-
+- [ ] Clean up warnings
 ## Contributing
 
 Contributions are welcome!

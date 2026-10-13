@@ -27,7 +27,7 @@ namespace Graphics
         glDeleteProgram(ID);
     }
 
-    void KShader::LoadShader(const char* vertexPath, const char* fragmentPath)
+    bool KShader::LoadShader(const char* vertexPath, const char* fragmentPath)
     {
         std::string vertexCode;
         std::string fragmentCode;
@@ -124,6 +124,8 @@ namespace Graphics
         glDeleteShader(fragment);
 
         LOG_TRACE("Shader bound to vertex " + std::string(vertexPath) + " and fragment " + std::string(fragmentPath) + " was succesfully created" );
+
+        return true;
     }
 
     // use my program

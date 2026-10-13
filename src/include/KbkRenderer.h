@@ -38,7 +38,18 @@ namespace Graphics
         /**
         * @brief  virtual destructor for the renderer   
         */
-        virtual ~KRenderer() = default;
+        virtual ~KRenderer() 
+        {
+            glDeleteBuffers(1, &quadVAO_);
+            glDeleteBuffers(1, &quadVBO_);
+
+            quadVAO_ = quadVBO_ = 0;
+
+            meshes_.clear();
+            lights_.clear();
+            buffers_.clear();
+            passes_.clear();
+        }
         
         /**
         * @brief  It overrides the drawing of each of the 
@@ -203,6 +214,8 @@ namespace Graphics
     {
         //KForwardRenderer();
 
+        ~KForwardRenderer() override = default;
+
         void render(const glm::mat4& view, const glm::mat4& proj) override;
     };
 
@@ -210,6 +223,8 @@ namespace Graphics
     {
 
         //KInstancedRenderer();
+
+        ~KInstancedRenderer() override = default;
 
         void render(const glm::mat4& view, const glm::mat4& proj) override;
     };
@@ -219,12 +234,15 @@ namespace Graphics
     public: 
         KDeferredRenderer(int width, int height);
 
+        ~KDeferredRenderer() override = default;
+
         void render(const glm::mat4& view, const glm::mat4& proj) override;
     };
 
     class KRayTraceRenderer : public KRenderer
     {
         //KRayTraceRenderer();
+        ~KRayTraceRenderer() override = default;
 
         void render(const glm::mat4& view, const glm::mat4& proj) override;
     };

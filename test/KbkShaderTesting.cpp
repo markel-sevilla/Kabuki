@@ -2,8 +2,8 @@
 
 #include <filesystem>
 #include <iostream>
+#include <exception>
 #include "KbkShader.h"
-
 
 class KbkShaderTest : public OpenGLTest
 {
@@ -12,21 +12,17 @@ protected:
     void SetUp() override
     {
         OpenGLTest::SetUp();
-
-        // TODO
     }
 
     void TearDown() override
     {
-        // TODO
-
         OpenGLTest::TearDown();
     }
 };
 
 TEST(KShaderTest, LoadShader)
 {
-   const auto cwd = std::filesystem::current_path();
+    const auto cwd = std::filesystem::current_path();
 
     std::cerr << "Working directory: " << cwd << '\n';
 
@@ -35,32 +31,20 @@ TEST(KShaderTest, LoadShader)
     std::cerr << "Shader path: " << shaderPath << '\n';
     std::cerr << "Exists: " << std::filesystem::exists(shaderPath) << '\n';
 
-    ASSERT_TRUE(std::filesystem::exists(shaderPath));
+    EXPECT_EQ(std::filesystem::exists(shaderPath), true);
 }
 
-// TEST_F(KbkShaderTest, Constructor)
-// {
-//     // TODO
-// }
-
-
-// TEST_F(KbkShaderTest, VertexShaderCompiles)
-// {
-//     // TODO
-// }
-
-
-// TEST_F(KbkShaderTest, FragmentShaderCompiles)
-// {
-//     // TODO
-// }
-
-
-// TEST_F(KbkShaderTest, ShaderProgramLinks)
-// {
-//     // TODO
-// }
-
+TEST_F(KbkShaderTest, Constructor)
+{
+    try
+    {
+        auto shader = std::make_unique<Graphics::KShader>("data/shaders/geometryVertex.vs", "data/shaders/geometryFragment.fs");
+    }
+    catch(std::exception& msg)
+    {
+        FAIL();
+    }
+}
 
 // TEST_F(KbkShaderTest, ShaderBinds)
 // {
@@ -68,10 +52,10 @@ TEST(KShaderTest, LoadShader)
 // }
 
 
-// TEST_F(KbkShaderTest, UniformCanBeSet)
-// {
-//     // TODO
-// }
+TEST_F(KbkShaderTest, UniformCanBeSet)
+{
+    // TODO
+}
 
 
 // TEST_F(KbkShaderTest, InvalidShaderFails)
