@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
 project(k-lib)
-
-# Engine library
-#add_library(${PROJECT_NAME}   
-        
- #       )
  
 add_library(${PROJECT_NAME} STATIC 
 		    include/KbkCamera.h

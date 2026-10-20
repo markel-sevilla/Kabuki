@@ -40,7 +40,7 @@ namespace Graphics
         */
         virtual ~KRenderer() 
         {
-            glDeleteBuffers(1, &quadVAO_);
+            glDeleteVertexArrays(1, &quadVAO_);
             glDeleteBuffers(1, &quadVBO_);
 
             quadVAO_ = quadVBO_ = 0;

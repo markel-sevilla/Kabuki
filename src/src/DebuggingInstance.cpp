@@ -83,6 +83,9 @@ namespace Debug
             for (auto& sink : mSinks)
                 sink->write(formatted, level);
         }
+
+        if(level == LogLevel::Error || level == LogLevel::Fatal)
+            throw std::runtime_error{formatted.c_str()};
     }
     
 #ifdef VULKAN_API

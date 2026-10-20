@@ -11,13 +11,10 @@ protected:
     {
         OpenGLTest::SetUp();
 
-        // TODO: crear cámara
     }
 
     void TearDown() override
     {
-        // TODO
-
         OpenGLTest::TearDown();
     }
 };

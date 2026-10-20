@@ -11,7 +11,7 @@ add_executable(k-lib-tests
     #KbkLightTesting.cpp
     #KbkMeshTesting.cpp
     KbkPassTesting.cpp
-    #KbkPipelineTesting.cpp
+    KbkPipelineTesting.cpp
     #KbkRendererTesting.cpp
     KbkShaderTesting.cpp
     #KbkTextureTesting.cpp

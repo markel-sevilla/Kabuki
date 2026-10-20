@@ -1,5 +1,4 @@
 #include "OpenGLTest.h"
-
 #include "KbkPipeline.h"
 
 
@@ -9,45 +8,49 @@ protected:
 
     void SetUp() override
     {
-        OpenGLTest::SetUp();
-
-        // TODO
     }
 
     void TearDown() override
     {
-        // TODO
-
-        OpenGLTest::TearDown();
     }
 };
 
 
 TEST_F(KbkPipelineTest, Constructor)
 {
-    // TODO
+    try{
+        auto pipeline = Graphics::KPipeline::kCreatePipelineGL(1600, 900, Graphics::KRenderType::DEF, true, true);
+    }
+    catch(const std::exception& e)
+    {
+        FAIL();
+    }
 }
 
-
-TEST_F(KbkPipelineTest, CreatesPipeline)
+TEST_F(KbkPipelineTest, CreatesBadPipelineSize)
 {
-    // TODO
+    try{
+        auto pipeline = Graphics::KPipeline::kCreatePipelineGL(-1, -1, static_cast<Graphics::KRenderType>(0), true, true);
+    }
+    catch( const std::exception& e)
+    {
+        SUCCEED();
+        return;
+    }
+
+    FAIL();
 }
 
-
-TEST_F(KbkPipelineTest, AttachShader)
+TEST_F(KbkPipelineTest, CreatesBadPipelineRender)
 {
-    // TODO
-}
+     try{
+        auto pipeline = Graphics::KPipeline::kCreatePipelineGL(1600, 900, static_cast<Graphics::KRenderType>(-1), true, true);
+    }
+    catch( const std::exception& e)
+    {
+        SUCCEED();
+        return;
+    }
 
-
-TEST_F(KbkPipelineTest, Link)
-{
-    // TODO
-}
-
-
-TEST_F(KbkPipelineTest, Bind)
-{
-    // TODO
+    FAIL();
 }

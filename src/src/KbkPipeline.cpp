@@ -20,6 +20,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "KbkLight.h"
+#include <exception>
 
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -97,12 +98,28 @@ namespace Graphics
 
     std::unique_ptr<KPipeline> KPipeline::kCreatePipelineGL(int width, int height, KRenderType type, bool resizeable , bool hintVisible )
     {
-        return std::unique_ptr<KPipeline>(new KPipeline(width, height, KAPI::GL, type, resizeable, hintVisible));
+		try{
+
+			return std::unique_ptr<KPipeline>(new KPipeline(width, height, KAPI::GL, type, resizeable, hintVisible));
+		}
+		catch(const std::exception& e)
+		{
+			LOG_ERROR("Error in creation of GL pipeline" + std::string(e.what()));
+			return nullptr;
+		}
     }
     
     std::unique_ptr<KPipeline> KPipeline::kCreatePipelineVK(int width, int height, KRenderType type, bool resizeable, bool hintVisible)
     {
-        return std::unique_ptr<KPipeline>(new KPipeline(width, height, KAPI::VK, type, resizeable, hintVisible));
+		try{
+
+			return std::unique_ptr<KPipeline>(new KPipeline(width, height, KAPI::VK, type, resizeable, hintVisible));
+		}
+		catch(const std::exception& e)
+		{
+			LOG_ERROR("Error in creation of VK pipeline" + std::string(e.what()));
+			return nullptr;
+		}
     }
 
     KPipeline::KPipeline(int width, int height, KAPI api, KRenderType type, bool resizeable, bool hintVisible) : 
@@ -113,6 +130,9 @@ namespace Graphics
                          hintVisible_(hintVisible),
                          clearColor_({0,0,0,1}) 
     {
+		if(width <= 0 || height <= 0)
+			LOG_ERROR("Invalid arguments in size of window");
+
         initGLFWPipeline(width, height, resizeable, hintVisible);
         
         // Enable debug output
@@ -145,12 +165,15 @@ namespace Graphics
                 createRayTraceGL();
                 break;
 
-            default : break;
+            default : 
+				LOG_ERROR("Invalid Argument in renderer type");
         }
     }
 
     KPipeline::~KPipeline()
     {
+		renderer_.reset(); // destroy the renderer before the glfw Context Terminates
+		
         LOG_TRACE("Destroy K-Pipeline");
         glfwTerminate();
     }
@@ -221,20 +244,22 @@ namespace Graphics
 
     void KPipeline::createForwardGL()
     {
-
     }
     void KPipeline::createInstancedGL()
     {
-
     }
     void KPipeline::createDeferredGL()
     {
-        LOG_TRACE("Initialize DEFERRED OpenGL renderer");
-        renderer_ = std::make_unique<KDeferredRenderer>(size_.x, size_.y);
+		try
+			renderer_ = std::make_unique<KDeferredRenderer>(size_.x, size_.y);
+		
+		catch(const std::exception& e)
+			LOG_ERROR("Deferrerd Renderer has not been able to init");
+
+		LOG_TRACE("Initialize DEFERRED OpenGL renderer");
     }
     void KPipeline::createRayTraceGL()
     {
-
     }
 
     void KPipeline::addMesh( KMesh* mesh)
@@ -450,8 +475,6 @@ namespace Graphics
 			return;
 
 		LOG_TRACE("Load Objects");
-
-		//renderer_->setCam(loadCamera(file));
 
         loadMeshes(file);
 
@@ -779,12 +802,6 @@ namespace Graphics
 				    for (int i : indices)
 				        newMesh->setVertexProperty(i, VertexProps::AvgNormal, &avg.x);
 				}
-
-				// // Normalize 
-				// for (auto& vertex : newMesh->mVertices) 
-				// {
-				// 	vertex.mAvgNormal = glm::normalize(vertex.mAvgNormal);
-				// }
 
 				// we generate the mesh
 				newMesh->generateMesh();
