@@ -11,21 +11,18 @@ protected:
     {
         OpenGLTest::SetUp();
 
-        // TODO
     }
 
     void TearDown() override
     {
-        // TODO
-
         OpenGLTest::TearDown();
     }
 };
 
 
-TEST_F(KbkTextureTest, Constructor)
+TEST_F(KbkTextureTest, STB_Load)
 {
-    // TODO
+    unsigned char* normalData = stbi_load(path.c_str(), &width, &height, &channels, 0);
 }
 
 
