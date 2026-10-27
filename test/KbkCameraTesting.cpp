@@ -22,29 +22,80 @@ protected:
 
 TEST_F(KbkCameraTest, Constructor)
 {
-    // TODO
+    try{
+
+        auto cam = std::make_unique<KCamera>(glm::radians(45), 300, 300, 0.5, 500, glm::vec3(0), glm::vec3(0));
+    }
+    catch (const std::exception& e)
+    {
+        FAIL();
+    }
+
+    EXPECT_NE(cam, nullptr);
 }
 
 
-TEST_F(KbkCameraTest, InitialPosition)
+TEST_F(KbkCameraTest, BadConstructor)
 {
-    // TODO
+    try{
+
+        //it has a -1, which is not allowed
+        auto cam = std::make_unique<KCamera>(glm::radians(45), -1, 300, 0.5, 500, glm::vec3(0), glm::vec3(0));
+    }
+    catch (const std::exception& e)
+    {
+        SUCCEED();
+        return;
+    }
+
+    FAIL();
 }
 
 
-TEST_F(KbkCameraTest, ViewMatrix)
+TEST_F(KbkCameraTest, LoadCamera)
 {
-    // TODO
+
+    try{
+        auto cam = loadCamera("scenes/scene.json");
+    }
+    catch (const std::exception& e )
+    {
+        FAIL();
+    }
+
+    EXPECT_NE(cam, nullptr);
 }
 
 
-TEST_F(KbkCameraTest, ProjectionMatrix)
+TEST_F(KbkCameraTest, Destructor)
 {
-    // TODO
+
+    auto cam = new KCamera(glm::radians(45), 300, 300, 0.5, 500, glm::vec3(0), glm::vec3(0));
+
+    try {
+        delete cam;
+    }
+    catch(const std::exception& e)
+    {
+        FAIL();
+    }
+    SUCCEED();
 }
 
 
-TEST_F(KbkCameraTest, CameraMovement)
-{
-    // TODO
-}
+// TEST_F(KbkCameraTest, ViewMatrix)
+// {
+//     // TODO
+// }
+
+
+// TEST_F(KbkCameraTest, ProjectionMatrix)
+// {
+//     // TODO
+// }
+
+
+// TEST_F(KbkCameraTest, CameraMovement)
+// {
+//     // TODO
+// }

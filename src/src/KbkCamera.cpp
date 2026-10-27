@@ -38,6 +38,9 @@ namespace Graphics
 
 		glm::vec3 Target = Position + Dir;
 
+        if(Near < 0 || Fovy < 0 || Width < 0 || Height < 0 || Far < 0)
+            LOG_ERROR("[ERROR] One of the parameters in Camera was not correct");
+        
         mView = glm::mat4(1);
         mProjection = glm::mat4(1);
         //specific variables 

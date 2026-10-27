@@ -93,7 +93,10 @@ namespace Graphics
 		default:break;
 		}
 
-		std::cerr << "OpenGL :" << type << std::endl << stream.str() << std::endl;
+		if(severity == GL_DEBUG_SEVERITY_MEDIUM || severity == GL_DEBUG_SEVERITY_HIGH)
+			LOG_ERROR(std::string("OpenGL :") + std::to_string(type) + "\n" + stream.str() + "\n");
+		else
+			LOG_WARNING(std::string("OpenGL :") + std::to_string(type) + "\n" + stream.str() +  "\n");
 	}
 
     std::unique_ptr<KPipeline> KPipeline::kCreatePipelineGL(int width, int height, KRenderType type, bool resizeable , bool hintVisible )
@@ -250,11 +253,12 @@ namespace Graphics
     }
     void KPipeline::createDeferredGL()
     {
-		try
+		try{
 			renderer_ = std::make_unique<KDeferredRenderer>(size_.x, size_.y);
-		
-		catch(const std::exception& e)
+		}
+		catch(const std::exception& e){
 			LOG_ERROR("Deferrerd Renderer has not been able to init");
+		}
 
 		LOG_TRACE("Initialize DEFERRED OpenGL renderer");
     }

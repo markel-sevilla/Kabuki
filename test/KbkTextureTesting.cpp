@@ -22,35 +22,54 @@ protected:
 
 TEST_F(KbkTextureTest, STB_Load)
 {
-    unsigned char* normalData = stbi_load(path.c_str(), &width, &height, &channels, 0);
+    int width, height, channels;
+    unsigned char* data = stbi_load("textures/Color.png" &width, &height, &channels, 0);
+
+    ASSERT_NE(normalData, nullptr);
+
+    stbi_image_free(data);
 }
 
 
 TEST_F(KbkTextureTest, CreatesTexture)
 {
-    // TODO
+    auto tex = std::make_unique<KTexture>();
+    
+    int width, height, channels;
+
+    unsigned char* data = stbi_load("textures/Color.png" &width, &height, &channels, 0);
+
+    try
+    {
+        tex->generateTexture(MatType::BASE, data, width, height, channels, false);
+    }
+    catch(const std::exception& e)
+    {
+        FAIL();
+    }
+
+    SUCCEED();
 }
 
 
-TEST_F(KbkTextureTest, LoadsTexture)
+TEST_F(KbkTextureTest, Destructor)
 {
-    // TODO
-}
+    auto tex = new KTexture();
+    
+    int width, height, channels;
 
+    unsigned char* data = stbi_load("textures/Color.png" &width, &height, &channels, 0);
 
-TEST_F(KbkTextureTest, BindsTexture)
-{
-    // TODO
-}
+    tex->generateTexture(MatType::BASE, data, width, height, channels, false);
 
+    try
+    {
+        delete tex;
+    }
+    catch(const std::exception& e)
+    {
+        FAIL();
+    }
 
-TEST_F(KbkTextureTest, TextureParameters)
-{
-    // TODO
-}
-
-
-TEST_F(KbkTextureTest, ReleasesTexture)
-{
-    // TODO
+    SUCCEED();
 }

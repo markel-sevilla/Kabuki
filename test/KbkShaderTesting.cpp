@@ -44,21 +44,40 @@ TEST_F(KbkShaderTest, Constructor)
     {
         FAIL();
     }
-}
 
-// TEST_F(KbkShaderTest, ShaderBinds)
-// {
-//     // TODO
-// }
+    SUCCEED();
+}
 
 
 TEST_F(KbkShaderTest, UniformCanBeSet)
 {
     // TODO
+
+    auto shader = std::make_unique<Graphics::KShader>("data/shaders/geometryVertex.vs", "data/shaders/geometryFragment.fs");
+
+    try{
+        shader->SetUniform("texCoord", glm::vec2(0));
+    }
+    catch (const std::exception& e)
+    {
+        FAIL();
+    }
+
+    SUCCEED();
 }
 
+TEST_F(KbkShaderTest, Destructor)
+{
+    auto shader = new Graphics::KShader("data/shaders/geometryVertex.vs", "data/shaders/geometryFragment.fs");
 
-// TEST_F(KbkShaderTest, InvalidShaderFails)
-// {
-//     // TODO
-// }
+    try
+    {
+        delete shader;
+    }
+    catch(std::exception& msg)
+    {
+        FAIL();
+    }
+
+    SUCCEED();
+}

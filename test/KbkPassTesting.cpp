@@ -13,14 +13,10 @@ protected:
     void SetUp() override
     {
         OpenGLTest::SetUp();
-
-        // TODO
     }
 
     void TearDown() override
     {
-        // TODO
-
         OpenGLTest::TearDown();
     }
 };
@@ -73,7 +69,7 @@ TEST_F(KbkPassTest, Attachments)
    using namespace Graphics;
 
    auto renderer = std::make_unique<KDeferredRenderer>(1600, 900);
-    // TODO
+
    auto gPass = KPass::createPass(renderer.get(), "data/shaders/geometryVertex.vs", "data/shaders/geometryFragment.fs", PassType::GPass);
 
    KAttachment att;
@@ -96,7 +92,6 @@ TEST_F(KbkPassTest, Destructor)
    using namespace Graphics;
 
    auto renderer = std::make_unique<KDeferredRenderer>(1600, 900);
-    // TODO
    auto gPass = KPass::createPass(renderer.get(), "data/shaders/geometryVertex.vs", "data/shaders/geometryFragment.fs", PassType::GPass);
 
    KAttachment att;
